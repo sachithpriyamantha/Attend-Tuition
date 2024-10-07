@@ -1,20 +1,20 @@
-import { useEffect, useState } from 'react';
-import { IconButton, Box, Menu, MenuItem, ListItemIcon, Tooltip } from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Box, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { deleteUser } from '../../../redux/userRelated/userHandle';
-import { getAllSclasses } from '../../../redux/sclassRelated/sclassHandle';
 import { BlueButton, GreenButton } from '../../../components/buttonStyles';
 import TableTemplate from '../../../components/TableTemplate';
+import { getAllSclasses } from '../../../redux/sclassRelated/sclassHandle';
+import { deleteUser } from '../../../redux/userRelated/userHandle';
 
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import AddCardIcon from '@mui/icons-material/AddCard';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import styled from 'styled-components';
-import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
 import Popup from '../../../components/Popup';
+import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
 
 const ShowClasses = () => {
   const navigate = useNavigate()

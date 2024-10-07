@@ -1,15 +1,15 @@
 import { Container, Grid, Paper } from '@mui/material';
-import SeeNotice from '../../components/SeeNotice';
+import { useEffect } from 'react';
+import CountUp from 'react-countup';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import Students from "../../assets/img1.gif";
 import Classes from "../../assets/img2.gif";
-import Teachers from "../../assets/img3.gif"; // We'll use this image for bottom-left corner too.
+import Teachers from "../../assets/img3.gif";
 import Fees from "../../assets/img4.gif";
 import BottomRightImage from "../../assets/img5.gif";
 import BottomlefttImage from "../../assets/img6.gif";
-import styled from 'styled-components';
-import CountUp from 'react-countup';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import SeeNotice from '../../components/SeeNotice';
 import { getAllSclasses } from '../../redux/sclassRelated/sclassHandle';
 import { getAllStudents } from '../../redux/studentRelated/studentHandle';
 import { getAllTeachers } from '../../redux/teacherRelated/teacherHandle';
@@ -109,9 +109,15 @@ const Title = styled.p`
   color: #333;
 `;
 
+// const Data = styled(CountUp)`
+//   font-size: calc(1.3rem + .6vw);
+//   color: #28a745;
+// `;
+
 const Data = styled(CountUp)`
-  font-size: calc(1.3rem + .6vw);
-  color: #28a745;
+  font-size: calc(1.5rem + .8vw); // Responsive font size
+  color: #4caf50; // Material Green color
+  font-weight: bold;
 `;
 
 const AnimatedNoticePaper = styled(Paper)`

@@ -363,36 +363,36 @@
 
 
 
-import MenuIcon from '@mui/icons-material/Menu';
 import {
-  Alert,
-  AppBar,
   Box,
   Button,
   Card,
   CardContent,
   CircularProgress,
-  Drawer,
   Fade,
   FormControl,
-  IconButton,
   InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Drawer,
   List,
   ListItem,
   ListItemText,
-  MenuItem,
-  Select,
   Snackbar,
-  TextField,
-  Toolbar,
-  Typography,
+  Alert,
 } from '@mui/material';
-import { keyframes } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { QrReader } from 'react-qr-reader';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSubjectList } from '../../../redux/sclassRelated/sclassHandle';
 import { updateStudentFields } from '../../../redux/studentRelated/studentHandle';
+import MenuIcon from '@mui/icons-material/Menu';
+import { keyframes } from '@mui/system';
 
 const bounce = keyframes`
   0%, 20%, 50%, 80%, 100% {
@@ -462,7 +462,7 @@ const AdminAttendance = () => {
     setSubjectName(selectedSubject.subName);
     setChosenSubName(selectedSubject._id);
   };
- 
+
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
@@ -541,7 +541,7 @@ const AdminAttendance = () => {
                       <MenuItem key={index} value={subject.subName}>
                         {subject.subName}
                       </MenuItem>
-                    )) 
+                    ))
                   ) : (
                     <MenuItem value="" disabled>
                       No Subjects Available
