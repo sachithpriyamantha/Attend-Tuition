@@ -109,11 +109,6 @@ const Title = styled.p`
   color: #333;
 `;
 
-// const Data = styled(CountUp)`
-//   font-size: calc(1.3rem + .6vw);
-//   color: #28a745;
-// `;
-
 const Data = styled(CountUp)`
   font-size: calc(1.5rem + .8vw); // Responsive font size
   color: #4caf50; // Material Green color
@@ -141,16 +136,35 @@ const AnimatedNoticePaper = styled(Paper)`
   }
 `;
 
+// Bottom Right Image Styling
 const BottomRightImageWrapper = styled.div`
   position: fixed;
   bottom: -10px;
   right: -120px;
   z-index: 1;
+
+  @media (max-width: 768px) {
+    right: -40px;
+    bottom: 0;
+  }
+
+  @media (max-width: 480px) {
+    right: -10px;
+    bottom: 0;
+  }
 `;
 
 const BottomRightImageStyled = styled.img`
   width: 460px;
   height: auto;
+
+  @media (max-width: 768px) {
+    width: 240px;
+  }
+
+  @media (max-width: 480px) {
+    width: 180px;
+  }
 `;
 
 // Bottom-Left Image Styling
@@ -159,11 +173,29 @@ const BottomLeftImageWrapper = styled.div`
   bottom: -10px;
   left: -60px;
   z-index: 1;
+
+  @media (max-width: 768px) {
+    left: -20px;
+    bottom: 0;
+  }
+
+  @media (max-width: 480px) {
+    left: 0;
+    bottom: 0;
+  }
 `;
 
 const BottomLeftImageStyled = styled.img`
   width: 460px; /* Adjust the size as needed */
   height: auto;
+
+  @media (max-width: 768px) {
+    width: 240px;
+  }
+
+  @media (max-width: 480px) {
+    width: 180px;
+  }
 `;
 
 export default AdminHomePage;

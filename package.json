@@ -13,9 +13,11 @@
     "axios": "^1.3.6",
     "dotenv": "^16.1.3",
     "eslint-config-react-app": "^7.0.1",
+    "formik": "^2.4.6",
     "framer-motion": "^11.4.0",
     "qrcode.react": "^4.0.1",
     "react-countup": "^6.4.2",
+    "react-phone-number-input": "^3.4.8",
     "react-qr-code": "^2.0.15",
     "react-qr-reader": "^3.0.0-beta-1",
     "react-qr-scanner": "^1.0.0-alpha.11",
@@ -24,14 +26,14 @@
     "react-scripts": "5.0.1",
     "recharts": "^2.6.2",
     "redux": "^4.2.1",
-    "styled-components": "^5.3.10"
+    "styled-components": "^5.3.10",
+    "yup": "^1.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "npm run build && some-deployment-command"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
