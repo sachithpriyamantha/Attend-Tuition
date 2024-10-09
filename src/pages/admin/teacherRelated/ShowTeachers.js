@@ -175,14 +175,16 @@
 
 
 
+import DeleteIcon from '@mui/icons-material/Delete';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Box, IconButton, Paper, TextField } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { BlueButton, GreenButton } from '../../../components/buttonStyles';
+import { GreenButton } from '../../../components/buttonStyles';
 import Popup from '../../../components/Popup';
 import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
 import { getAllTeachers } from '../../../redux/teacherRelated/teacherHandle';
@@ -242,7 +244,15 @@ const ShowTeachers = () => {
         {
             field: 'actions', headerName: 'Actions', flex: 1, minWidth: 150, align: 'center', headerAlign: 'center', renderCell: (params) => (
                 <>
-                    <IconButton onClick={() => deleteHandler(params.row.id, "Teacher")}>
+                <IconButton onClick={() => deleteHandler(params.row.id, "Student")}>
+                        <DeleteIcon color="error" fontSize="small" />
+                    </IconButton>
+
+                    <IconButton onClick={() => navigate(`/Admin/teachers/teacher/${params.row.id}`)}>
+                        <RemoveRedEyeIcon color="primary" fontSize="small" />
+                        
+                    </IconButton>
+                    {/* <IconButton onClick={() => deleteHandler(params.row.id, "Teacher")}>
                         <PersonRemoveIcon color="error" fontSize="small" />
                     </IconButton>
                     <BlueButton
@@ -251,7 +261,7 @@ const ShowTeachers = () => {
                         onClick={() => navigate(`/Admin/teachers/teacher/${params.row.id}`)}
                     >
                         View
-                    </BlueButton>
+                    </BlueButton> */}
                 </>
             )
         }

@@ -3,7 +3,7 @@ import { Box, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/mat
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { BlueButton, GreenButton } from '../../../components/buttonStyles';
+import { GreenButton } from '../../../components/buttonStyles';
 import TableTemplate from '../../../components/TableTemplate';
 import { getAllSclasses } from '../../../redux/sclassRelated/sclassHandle';
 import { deleteUser } from '../../../redux/userRelated/userHandle';
@@ -11,6 +11,7 @@ import { deleteUser } from '../../../redux/userRelated/userHandle';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PostAddIcon from '@mui/icons-material/PostAdd';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import styled from 'styled-components';
 import Popup from '../../../components/Popup';
@@ -69,10 +70,18 @@ const ShowClasses = () => {
         <IconButton onClick={() => deleteHandler(row.id, "Sclass")} color="secondary">
           <DeleteIcon color="error" />
         </IconButton>
-        <BlueButton variant="contained"
+        {/* <BlueButton variant="contained"
           onClick={() => navigate("/Admin/classes/class/" + row.id)}>
           View
-        </BlueButton>
+        </BlueButton> */}
+        {/* <IconButton onClick={() => deleteHandler(params.row.id, "Student")}>
+                        <DeleteIcon color="error" fontSize="small" />
+                    </IconButton> */}
+
+                    <IconButton onClick={() => navigate("/Admin/classes/class/" + row.id)}>
+                        <RemoveRedEyeIcon color="primary" fontSize="small" />
+                        
+                    </IconButton>
         <ActionMenu actions={actions} />
       </ButtonContainer>
     );

@@ -121,12 +121,13 @@
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import PostAddIcon from '@mui/icons-material/PostAdd';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Box, IconButton, Paper, TextField } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import { BlueButton, GreenButton } from '../../../components/buttonStyles';
+import { GreenButton } from '../../../components/buttonStyles';
 import Popup from '../../../components/Popup';
 import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
 import { getSubjectList } from '../../../redux/sclassRelated/sclassHandle';
@@ -185,7 +186,16 @@ const ShowSubjects = () => {
         {
             field: 'actions', headerName: 'Actions', flex: 0.8, minWidth: 150, align: 'center', headerAlign: 'center', renderCell: (params) => (
                 <>
-                    <IconButton onClick={() => deleteHandler(params.row.id, "Subject")}>
+                <IconButton onClick={() => deleteHandler(params.row.id, "Student")}>
+                        <DeleteIcon color="error" fontSize="small" />
+                    </IconButton>
+
+                    <IconButton onClick={() => navigate(`/Admin/subjects/subject/${params.row.id}`)}>
+                        <RemoveRedEyeIcon color="primary" fontSize="small" />
+                        
+                    </IconButton>
+                
+                    {/* <IconButton onClick={() => deleteHandler(params.row.id, "Subject")}>
                         <DeleteIcon color="error" fontSize="small" />
                     </IconButton>
                     <BlueButton
@@ -194,7 +204,7 @@ const ShowSubjects = () => {
                         onClick={() => navigate(`/Admin/subjects/subject/${params.row.id}`)}
                     >
                         View
-                    </BlueButton>
+                    </BlueButton> */}
                 </>
             )
         }

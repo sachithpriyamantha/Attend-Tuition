@@ -7,8 +7,7 @@ import {
     IconButton,
     List,
     Toolbar,
-    Typography,
-    Slide,
+    Typography
 } from '@mui/material';
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';

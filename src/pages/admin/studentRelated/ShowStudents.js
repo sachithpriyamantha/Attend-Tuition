@@ -252,14 +252,15 @@
 
 
 
+import DeleteIcon from '@mui/icons-material/Delete';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Box, IconButton, Paper, TextField } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import { BlueButton, GreenButton } from '../../../components/buttonStyles';
+import { GreenButton } from '../../../components/buttonStyles';
 import Popup from '../../../components/Popup';
 import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
 import { getAllStudents } from '../../../redux/studentRelated/studentHandle';
@@ -331,15 +332,22 @@ const ShowStudents = () => {
             field: 'actions', headerName: 'Actions', flex: 0.8, minWidth: 150, align: 'center', headerAlign: 'center', renderCell: (params) => (
                 <>
                     <IconButton onClick={() => deleteHandler(params.row.id, "Student")}>
-                        <PersonRemoveIcon color="error" fontSize="small" />
+                        <DeleteIcon color="error" fontSize="small" />
                     </IconButton>
-                    <BlueButton
+
+                    <IconButton onClick={() => navigate(`/Admin/students/student/${params.row.id}`)}>
+                        <RemoveRedEyeIcon color="primary" fontSize="small" />
+                        
+                    </IconButton>
+
+
+                    {/* <BlueButton
                         variant="contained"
                         size="small"
                         onClick={() => navigate(`/Admin/students/student/${params.row.id}`)}
                     >
                         View
-                    </BlueButton>
+                    </BlueButton> */}
                 </>
             )
         }
@@ -351,8 +359,9 @@ const ShowStudents = () => {
             name: 'Add New Student',
             action: () => navigate("/Admin/addstudents")
         },
+        
         {
-            icon: <PersonRemoveIcon color="error" />,
+            icon: <DeleteIcon color="error" />,
             name: 'Delete All Students',
             action: () => deleteHandler(currentUser._id, "Students")
         },
