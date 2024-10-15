@@ -179,7 +179,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { Box, IconButton, Paper, TextField } from '@mui/material';
+import { Box, IconButton, Paper, TextField, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -226,7 +226,7 @@ const ShowTeachers = () => {
 
     const filteredRows = teachersList && teachersList.length > 0 && teachersList
         .filter((teacher) =>
-            teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) ||  
+            teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             teacher.teachSubject?.subName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             teacher.teachSclass.sclassName.toLowerCase().includes(searchTerm.toLowerCase())
         )
@@ -244,13 +244,13 @@ const ShowTeachers = () => {
         {
             field: 'actions', headerName: 'Actions', flex: 1, minWidth: 150, align: 'center', headerAlign: 'center', renderCell: (params) => (
                 <>
-                <IconButton onClick={() => deleteHandler(params.row.id, "Student")}>
+                    <IconButton onClick={() => deleteHandler(params.row.id, "Student")}>
                         <DeleteIcon color="error" fontSize="small" />
                     </IconButton>
 
                     <IconButton onClick={() => navigate(`/Admin/teachers/teacher/${params.row.id}`)}>
                         <RemoveRedEyeIcon color="primary" fontSize="small" />
-                        
+
                     </IconButton>
                     {/* <IconButton onClick={() => deleteHandler(params.row.id, "Teacher")}>
                         <PersonRemoveIcon color="error" fontSize="small" />
@@ -282,7 +282,7 @@ const ShowTeachers = () => {
 
     return (
         <>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', marginBottom: '16px' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', marginBottom: '16px', marginLeft: '10px' }}>
                 <Box sx={{ width: '300px' }}>
                     <TextField
                         label="Search..."
@@ -291,15 +291,21 @@ const ShowTeachers = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="Search name, subject, etc..."
-                        size="small" 
+                        size="small"
                     />
                 </Box>
-                <GreenButton variant="contained" onClick={() => navigate("/Admin/teachers/chooseclass")}>
+                
+                {/* Center: Table heading */}
+                <Typography variant="h5" align="center" fontWeight={"bold"} sx={{ flexGrow: 1 }}>
+                    Teachers List
+                </Typography>
+
+                <GreenButton variant="contained" onClick={() => navigate("/Admin/teachers/chooseclass")} style={{ marginRight: 10 }}>
                     Add Teacher
                 </GreenButton>
             </Box>
 
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <Paper sx={{ width: '90%', margin: 'auto', overflow: 'hidden', padding: '16px', borderRadius: '12px', backgroundColor: '#a2d2ff' }}>
                 {!loading && Array.isArray(filteredRows) && filteredRows.length > 0 ? (
                     <DataGrid
                         rows={filteredRows}
@@ -312,12 +318,16 @@ const ShowTeachers = () => {
                                 backgroundColor: '#1976d2',
                                 color: '#fff',
                                 fontSize: '1rem',
+                                fontWeight: 'bold',
                             },
                             '& .MuiDataGrid-columnSeparator': {
-                                display: 'none', 
+                                display: 'none',
                             },
                             '& .MuiDataGrid-cell': {
                                 textAlign: 'center',
+                            },
+                            '& .MuiDataGrid-row:hover': {
+                                backgroundColor: '#f5f5f5',
                             }
                         }}
                     />

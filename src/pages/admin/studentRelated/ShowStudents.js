@@ -255,7 +255,7 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { Box, IconButton, Paper, TextField } from '@mui/material';
+import { Box, IconButton, Paper, TextField, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -369,7 +369,7 @@ const ShowStudents = () => {
 
     return (
         <>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', marginBottom: '16px' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', marginBottom: '16px' , marginLeft: '10px'}}>
                 <Box sx={{ width: '300px' }}>
                     <TextField
                         label="Search..."
@@ -381,12 +381,18 @@ const ShowStudents = () => {
                         size="small" 
                     />
                 </Box>
-                <GreenButton variant="contained" onClick={() => navigate("/Admin/addstudents")}>
+                
+                {/* Center: Table heading */}
+                <Typography variant="h5" align="center" fontWeight={"bold"} sx={{ flexGrow: 1 }}>
+                    Students List
+                </Typography>
+
+                <GreenButton variant="contained" onClick={() => navigate("/Admin/addstudents")} style={{ marginRight: 10 }}>
                     Add Students
                 </GreenButton>
             </Box>
 
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <Paper sx={{ width: '100%', margin: 'auto', overflow: 'hidden', padding: '16px', borderRadius: '12px', backgroundColor: '#a2d2ff' }}>
                 {!loading && Array.isArray(filteredRows) && filteredRows.length > 0 ? (
                     <DataGrid
                         rows={filteredRows}
@@ -399,12 +405,16 @@ const ShowStudents = () => {
                                 backgroundColor: '#1976d2',
                                 color: '#fff',
                                 fontSize: '1rem',
+                                fontWeight: 'bold',
                             },
                             '& .MuiDataGrid-columnSeparator': {
-                                display: 'none', 
+                                display: 'none',
                             },
                             '& .MuiDataGrid-cell': {
                                 textAlign: 'center',
+                            },
+                            '& .MuiDataGrid-row:hover': {
+                                backgroundColor: '#f5f5f5',
                             }
                         }}
                     />
