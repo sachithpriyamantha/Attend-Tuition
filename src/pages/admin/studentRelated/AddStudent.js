@@ -43,6 +43,8 @@
 //     const [guardianPhone, setguardianPhone] = useState('');
 //     const [dob, setDob] = useState('');
 
+//     const [errors, setErrors] = useState({}); // To track errors
+
 //     const adminID = currentUser._id;
 //     const role = "Student";
 //     const attendance = [];
@@ -74,6 +76,22 @@
 //         }
 //     };
 
+//     const validateFields = () => {
+//         const newErrors = {};
+//         if (!name.trim()) newErrors.name = 'Name is required';
+//         if (!rollNum.trim()) newErrors.rollNum = 'Roll Number is required';
+//         if (!password.trim()) newErrors.password = 'Password is required';
+//         if (!address.trim()) newErrors.address = 'Address is required';
+//         if (!phoneNumber.trim()) newErrors.phoneNumber = 'Phone Number is required';
+//         if (!guardianName.trim()) newErrors.guardianName = 'Guardian Name is required';
+//         if (!guardianPhone.trim()) newErrors.guardianPhone = 'Guardian Phone is required';
+//         if (!dob) newErrors.dob = 'Date of Birth is required';
+//         if (!sclassName.trim()) newErrors.sclassName = 'Class must be selected';
+
+//         setErrors(newErrors);
+//         return Object.keys(newErrors).length === 0;
+//     };
+
 //     const fields = {
 //         name,
 //         rollNum,
@@ -91,8 +109,8 @@
 
 //     const submitHandler = (event) => {
 //         event.preventDefault();
-//         if (sclassName === '') {
-//             setMessage('Please select a classname');
+//         if (!validateFields()) {
+//             setMessage('Please fill in all the required fields');
 //             setShowPopup(true);
 //         } else {
 //             setLoader(true);
@@ -146,7 +164,6 @@
 //         setguardianPhone(formatguardianPhone(e.target.value));
 //     };
 
-
 //     return (
 //         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', backgroundColor: '#f4f6f8' }}>
 //             <Card sx={{ width: '100%', maxWidth: 600, boxShadow: 3, borderRadius: 4 }}>
@@ -161,7 +178,7 @@
 //                             {/* Class selection */}
 //                             {situation === "Student" && (
 //                                 <Grid item xs={12}>
-//                                     <FormControl fullWidth required>
+//                                     <FormControl fullWidth required error={!!errors.sclassName}>
 //                                         <InputLabel>Class</InputLabel>
 //                                         <Select
 //                                             value={className}
@@ -175,6 +192,7 @@
 //                                                 </MenuItem>
 //                                             ))}
 //                                         </Select>
+//                                         {errors.sclassName && <Typography color="error">{errors.sclassName}</Typography>}
 //                                     </FormControl>
 //                                 </Grid>
 //                             )}
@@ -189,6 +207,8 @@
 //                                     value={rollNum}
 //                                     onChange={(e) => setRollNum(e.target.value)}
 //                                     placeholder="Enter student's Roll Number"
+//                                     error={!!errors.rollNum}
+//                                     helperText={errors.rollNum}
 //                                 />
 //                             </Grid>
 
@@ -201,6 +221,8 @@
 //                                     value={name}
 //                                     onChange={(e) => setName(e.target.value)}
 //                                     placeholder="Enter student's name"
+//                                     error={!!errors.name}
+//                                     helperText={errors.name}
 //                                 />
 //                             </Grid>
 
@@ -214,6 +236,8 @@
 //                                     value={dob}
 //                                     onChange={(e) => setDob(e.target.value)}
 //                                     InputLabelProps={{ shrink: true }}
+//                                     error={!!errors.dob}
+//                                     helperText={errors.dob}
 //                                 />
 //                             </Grid>
 
@@ -226,6 +250,8 @@
 //                                     value={address}
 //                                     onChange={(e) => setAddress(e.target.value)}
 //                                     placeholder="Enter student's address"
+//                                     error={!!errors.address}
+//                                     helperText={errors.address}
 //                                 />
 //                             </Grid>
 
@@ -235,10 +261,11 @@
 //                                     fullWidth
 //                                     required
 //                                     label="Phone Number"
-//                                     type="tel"
 //                                     value={phoneNumber}
 //                                     onChange={handlePhoneNumberChange}
 //                                     placeholder="Enter student's phone number"
+//                                     error={!!errors.phoneNumber}
+//                                     helperText={errors.phoneNumber}
 //                                 />
 //                             </Grid>
 
@@ -247,23 +274,26 @@
 //                                 <TextField
 //                                     fullWidth
 //                                     required
-//                                     label="Guardian's Name"
+//                                     label="Guardian Name"
 //                                     value={guardianName}
 //                                     onChange={(e) => setGuardianName(e.target.value)}
 //                                     placeholder="Enter guardian's name"
+//                                     error={!!errors.guardianName}
+//                                     helperText={errors.guardianName}
 //                                 />
 //                             </Grid>
 
-//                             {/* Guardian's Phone Number */}
+//                             {/* Guardian Phone Number */}
 //                             <Grid item xs={12}>
 //                                 <TextField
 //                                     fullWidth
 //                                     required
-//                                     label="Guardian's Phone Number"
-//                                     type="tel"
+//                                     label="Guardian Phone Number"
 //                                     value={guardianPhone}
 //                                     onChange={handleguardianPhoneChanges}
 //                                     placeholder="Enter guardian's phone number"
+//                                     error={!!errors.guardianPhone}
+//                                     helperText={errors.guardianPhone}
 //                                 />
 //                             </Grid>
 
@@ -276,36 +306,34 @@
 //                                     type="password"
 //                                     value={password}
 //                                     onChange={(e) => setPassword(e.target.value)}
-//                                     placeholder="Enter student's password"
-//                                     autoComplete="new-password"
+//                                     placeholder="Enter password"
+//                                     error={!!errors.password}
+//                                     helperText={errors.password}
 //                                 />
 //                             </Grid>
 
 //                         </Grid>
+//                         <CardActions sx={{ justifyContent: 'center', mt: 2 }}>
+//                             <Button type="submit" variant="contained" color="primary" disabled={loader}>
+//                                 {loader ? <CircularProgress size={24} /> : 'Add Student'}
+//                             </Button>
+//                         </CardActions>
 //                     </form>
 //                 </CardContent>
-//                 <CardActions sx={{ padding: 2, display: 'flex', justifyContent: 'center' }}>
-//                     <Button
-//                         type="submit"
-//                         fullWidth
-//                         variant="contained"
-//                         color="primary"
-//                         disabled={loader}
-//                         onClick={submitHandler}
-//                         sx={{ height: 48 }}
-//                     >
-//                         {loader ? <CircularProgress size={24} color="inherit" /> : 'Add Student'}
-//                     </Button>
-//                 </CardActions>
 //             </Card>
 
-//             {/* Popup */}
-//             <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
+//             <Popup
+//                 open={showPopup}
+//                 onClose={() => setShowPopup(false)}
+//                 title="Submission Error"
+//                 content={message}
+//             />
 //         </Box>
 //     );
 // };
 
 // export default AddStudent;
+
 
 
 
@@ -332,6 +360,25 @@ import { getAllSclasses } from '../../../redux/sclassRelated/sclassHandle';
 import { registerUser } from '../../../redux/userRelated/userHandle';
 import { underControl } from '../../../redux/userRelated/userSlice';
 
+
+const styles = {
+    cardAnimation: {
+        animation: 'slideIn 0.8s ease-out',
+        backgroundColor: '#8fedf1',
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', 
+    },
+    '@keyframes slideIn': {
+        from: {
+            transform: 'translateY(100px)',
+            opacity: 0,
+        },
+        to: {
+            transform: 'translateY(0)',
+            opacity: 1,
+        }
+    }
+};
+
 const AddStudent = ({ situation }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -347,14 +394,14 @@ const AddStudent = ({ situation }) => {
     const [className, setClassName] = useState('');
     const [sclassName, setSclassName] = useState('');
 
-    // New fields for student and guardian
+    
     const [address, setAddress] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [guardianName, setGuardianName] = useState('');
     const [guardianPhone, setguardianPhone] = useState('');
     const [dob, setDob] = useState('');
 
-    const [errors, setErrors] = useState({}); // To track errors
+    const [errors, setErrors] = useState({}); 
 
     const adminID = currentUser._id;
     const role = "Student";
@@ -459,7 +506,6 @@ const AddStudent = ({ situation }) => {
         setPhoneNumber(formatPhoneNumber(e.target.value));
     };
 
-
     const formatguardianPhone = (value) => {
         if (!value) return value;
         const guardianPhone = value.replace(/[^\d]/g, "");
@@ -477,7 +523,7 @@ const AddStudent = ({ situation }) => {
 
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', backgroundColor: '#f4f6f8' }}>
-            <Card sx={{ width: '100%', maxWidth: 600, boxShadow: 3, borderRadius: 4 }}>
+            <Card sx={{ ...styles.cardAnimation, width: '100%', maxWidth: 600, borderRadius: 4 }}>
                 <CardContent>
                     <Typography variant="h5" align="center" gutterBottom>
                         Add New Student
@@ -485,8 +531,6 @@ const AddStudent = ({ situation }) => {
 
                     <form onSubmit={submitHandler}>
                         <Grid container spacing={2}>
-
-                            {/* Class selection */}
                             {situation === "Student" && (
                                 <Grid item xs={12}>
                                     <FormControl fullWidth required error={!!errors.sclassName}>
@@ -508,7 +552,6 @@ const AddStudent = ({ situation }) => {
                                 </Grid>
                             )}
 
-                            {/* Roll Number */}
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
@@ -523,7 +566,6 @@ const AddStudent = ({ situation }) => {
                                 />
                             </Grid>
 
-                            {/* Name */}
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
@@ -537,7 +579,6 @@ const AddStudent = ({ situation }) => {
                                 />
                             </Grid>
 
-                            {/* Date of Birth */}
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
@@ -552,7 +593,6 @@ const AddStudent = ({ situation }) => {
                                 />
                             </Grid>
 
-                            {/* Address */}
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
@@ -566,7 +606,6 @@ const AddStudent = ({ situation }) => {
                                 />
                             </Grid>
 
-                            {/* Phone Number */}
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
@@ -574,18 +613,17 @@ const AddStudent = ({ situation }) => {
                                     label="Phone Number"
                                     value={phoneNumber}
                                     onChange={handlePhoneNumberChange}
-                                    placeholder="Enter student's phone number"
+                                    placeholder="Enter phone number"
                                     error={!!errors.phoneNumber}
                                     helperText={errors.phoneNumber}
                                 />
                             </Grid>
 
-                            {/* Guardian Name */}
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     required
-                                    label="Guardian Name"
+                                    label="Guardian's Name"
                                     value={guardianName}
                                     onChange={(e) => setGuardianName(e.target.value)}
                                     placeholder="Enter guardian's name"
@@ -594,12 +632,11 @@ const AddStudent = ({ situation }) => {
                                 />
                             </Grid>
 
-                            {/* Guardian Phone Number */}
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     required
-                                    label="Guardian Phone Number"
+                                    label="Guardian's Phone"
                                     value={guardianPhone}
                                     onChange={handleguardianPhoneChanges}
                                     placeholder="Enter guardian's phone number"
@@ -608,7 +645,6 @@ const AddStudent = ({ situation }) => {
                                 />
                             </Grid>
 
-                            {/* Password */}
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
@@ -622,11 +658,19 @@ const AddStudent = ({ situation }) => {
                                     helperText={errors.password}
                                 />
                             </Grid>
-
                         </Grid>
-                        <CardActions sx={{ justifyContent: 'center', mt: 2 }}>
-                            <Button type="submit" variant="contained" color="primary" disabled={loader}>
-                                {loader ? <CircularProgress size={24} /> : 'Add Student'}
+
+                        <CardActions>
+                            <Button
+                                fullWidth
+                                variant="contained"
+                                type="submit"
+                                color="primary"
+                                disabled={loader}
+                                sx={{ mt: 2 }}
+                                endIcon={loader && <CircularProgress size={20} />}
+                            >
+                                {loader ? 'Adding...' : 'Add Student'}
                             </Button>
                         </CardActions>
                     </form>
@@ -637,7 +681,7 @@ const AddStudent = ({ situation }) => {
                 open={showPopup}
                 onClose={() => setShowPopup(false)}
                 title="Submission Error"
-                content={message}
+                message={message}
             />
         </Box>
     );
