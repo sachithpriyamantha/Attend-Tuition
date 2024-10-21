@@ -116,12 +116,12 @@ const ViewStudent = () => {
     const StudentMarksSection = () => {
         return (
             <div>
-                <h3>Marks:</h3>
+                {/* <h3>Marks:</h3> */}
                 <Table>
                     <TableHead>
                         <StyledTableRow>
-                            <StyledTableCell>Subject</StyledTableCell>
-                            <StyledTableCell>Marks</StyledTableCell>
+                            <StyledTableCell align="left">Subject</StyledTableCell>
+                            <StyledTableCell align="center">Marks</StyledTableCell>
                         </StyledTableRow>
                     </TableHead>
                     <TableBody>
@@ -131,8 +131,8 @@ const ViewStudent = () => {
                             }
                             return (
                                 <StyledTableRow key={index}>
-                                    <StyledTableCell>{result.subName.subName}</StyledTableCell>
-                                    <StyledTableCell>{result.marksObtained}</StyledTableCell>
+                                    <StyledTableCell align="left">{result.subName.subName}</StyledTableCell>
+                                    <StyledTableCell align="center">{result.marksObtained}</StyledTableCell>
                                 </StyledTableRow>
                             );
                         })}

@@ -1,8 +1,19 @@
+import { Button, Card, CardActions, CardContent, CircularProgress, Container, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect } from 'react';
-import { getTeacherDetails } from '../../../redux/teacherRelated/teacherHandle';
-import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Container, Typography } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getTeacherDetails } from '../../../redux/teacherRelated/teacherHandle';
+
+const AnimatedCard = styled(Card)(({ theme }) => ({
+    backgroundColor: '#f5f5f5',
+    boxShadow: theme.shadows[5],
+    borderRadius: '16px',
+    transition: 'transform 0.3s ease-in-out',
+    '&:hover': {
+        transform: 'scale(1.05)',
+    },
+}));
 
 const TeacherDetails = () => {
     const navigate = useNavigate();
@@ -27,37 +38,46 @@ const TeacherDetails = () => {
     };
 
     return (
-        <>
+        <Container maxWidth="sm" sx={{ mt: 4 }}>
             {loading ? (
-                <div>Loading...</div>
+                <CircularProgress sx={{ display: 'block', margin: '0 auto' }} />
             ) : (
-                <Container>
-                    <Typography variant="h4" align="center" gutterBottom>
-                        Teacher Details
-                    </Typography>
-                    <Typography variant="h6" gutterBottom>
-                        Teacher Name: {teacherDetails?.name}
-                    </Typography>
-                    <Typography variant="h6" gutterBottom>
-                        Class Name: {teacherDetails?.teachSclass?.sclassName}
-                    </Typography>
-                    {isSubjectNamePresent ? (
-                        <>
-                            <Typography variant="h6" gutterBottom>
-                                Subject Name: {teacherDetails?.teachSubject?.subName}
+                <AnimatedCard>
+                    <CardContent>
+                        <Typography variant="h4" align="center" gutterBottom color="primary">
+                            Teacher Details
+                        </Typography>
+                        <Typography variant="h6" gutterBottom color="textSecondary">
+                            Teacher Name: <strong>{teacherDetails?.name}</strong>
+                        </Typography>
+                        <Typography variant="h6" gutterBottom color="textSecondary">
+                            Class Name: <strong>{teacherDetails?.teachSclass?.sclassName}</strong>
+                        </Typography>
+                        {isSubjectNamePresent ? (
+                            <>
+                                <Typography variant="h6" gutterBottom color="textSecondary">
+                                    Subject Name: <strong>{teacherDetails?.teachSubject?.subName}</strong>
+                                </Typography>
+                                <Typography variant="h6" gutterBottom color="textSecondary">
+                                    Subject Sessions: <strong>{teacherDetails?.teachSubject?.sessions}</strong>
+                                </Typography>
+                            </>
+                        ) : (
+                            <Typography variant="h6" gutterBottom color="error">
+                                No subject assigned yet.
                             </Typography>
-                            <Typography variant="h6" gutterBottom>
-                                Subject Sessions: {teacherDetails?.teachSubject?.sessions}
-                            </Typography>
-                        </>
-                    ) : (
-                        <Button variant="contained" onClick={handleAddSubject}>
-                            Add Subject
-                        </Button>
-                    )}
-                </Container>
+                        )}
+                    </CardContent>
+                    <CardActions sx={{ justifyContent: 'center' }}>
+                        {!isSubjectNamePresent && (
+                            <Button variant="contained" color="primary" onClick={handleAddSubject}>
+                                Add Subject
+                            </Button>
+                        )}
+                    </CardActions>
+                </AnimatedCard>
             )}
-        </>
+        </Container>
     );
 };
 
