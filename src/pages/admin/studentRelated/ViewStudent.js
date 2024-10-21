@@ -584,29 +584,29 @@ const ViewStudent = () => {
             <div>
                 <h3>Marks:</h3>
                 <Table>
-                        <TableHead>
-                            <StyledTableRow>
-                                <StyledTableCell>Subject</StyledTableCell>
-                                <StyledTableCell>Marks</StyledTableCell>
-                            </StyledTableRow>
-                        </TableHead>
-                        <TableBody>
-                            {subjectMarks.map((result, index) => {
-                                if (!result.subName || !result.marksObtained) {
-                                    return null;
-                                }
-                                return (
-                                    <StyledTableRow key={index}>
-                                        <StyledTableCell>{result.subName.subName}</StyledTableCell>
-                                        <StyledTableCell>{result.marksObtained}</StyledTableCell>
-                                    </StyledTableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                    <Button variant="contained" sx={styles.styledButton} onClick={() => navigate("/Admin/students/student/marks/" + studentID)}>
-                        Add Marks
-                    </Button>
+                    <TableHead>
+                        <StyledTableRow>
+                            <StyledTableCell>Subject</StyledTableCell>
+                            <StyledTableCell>Marks</StyledTableCell>
+                        </StyledTableRow>
+                    </TableHead>
+                    <TableBody>
+                        {subjectMarks.map((result, index) => {
+                            if (!result.subName || !result.marksObtained) {
+                                return null;
+                            }
+                            return (
+                                <StyledTableRow key={index}>
+                                    <StyledTableCell>{result.subName.subName}</StyledTableCell>
+                                    <StyledTableCell>{result.marksObtained}</StyledTableCell>
+                                </StyledTableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+                <Button variant="contained" sx={styles.styledButton} onClick={() => navigate("/Admin/students/student/marks/" + studentID)}>
+                    Add Marks
+                </Button>
             </div>
         );
     };
@@ -632,17 +632,17 @@ const ViewStudent = () => {
                             )}
                         </CardContent>
                     </Card>
-    
+
                     {/* Attendance Table */}
                     <Box sx={styles.attendanceTableContainer}>
                         <h3>Attendance:</h3>
                         <Table>
                             <TableHead>
                                 <StyledTableRow>
-                                    <StyledTableCell>Subject</StyledTableCell>
-                                    <StyledTableCell>Present</StyledTableCell>
-                                    <StyledTableCell>Total Sessions</StyledTableCell>
-                                    <StyledTableCell>Attendance Percentage</StyledTableCell>
+                                    <StyledTableCell align="left">Subject</StyledTableCell>
+                                    <StyledTableCell align="center">Present</StyledTableCell>
+                                    <StyledTableCell align="center">Total Sessions</StyledTableCell>
+                                    <StyledTableCell align="center">Attendance Percentage</StyledTableCell>
                                     <StyledTableCell align="center">Actions</StyledTableCell>
                                 </StyledTableRow>
                             </TableHead>
@@ -652,10 +652,10 @@ const ViewStudent = () => {
                                     return (
                                         <React.Fragment key={index}>
                                             <StyledTableRow>
-                                                <StyledTableCell>{subName}</StyledTableCell>
-                                                <StyledTableCell>{present}</StyledTableCell>
-                                                <StyledTableCell>{sessions}</StyledTableCell>
-                                                <StyledTableCell>{subjectAttendancePercentage}%</StyledTableCell>
+                                                <StyledTableCell align="left">{subName}</StyledTableCell>
+                                                <StyledTableCell align="center">{present}</StyledTableCell>
+                                                <StyledTableCell align="center">{sessions}</StyledTableCell>
+                                                <StyledTableCell align="center">{subjectAttendancePercentage}%</StyledTableCell>
                                                 <StyledTableCell align="center">
                                                     <Button variant="contained" onClick={() => handleOpen(subId)}>
                                                         {openStates[subId] ? <KeyboardArrowUp /> : <KeyboardArrowDown />} Details
@@ -669,36 +669,46 @@ const ViewStudent = () => {
                                                 </StyledTableCell>
                                             </StyledTableRow>
                                             <StyledTableRow>
-                                                <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                                                <StyledTableCell style={{ paddingLeft:400  }} colSpan={4}>
                                                     <Collapse in={openStates[subId]} timeout="auto" unmountOnExit>
                                                         <Box sx={{ margin: 1 }}>
                                                             <Typography variant="h6" gutterBottom component="div">
                                                                 Attendance Details
                                                             </Typography>
-                                                            <Table size="small" aria-label="purchases">
-                                                                <TableHead>
-                                                                    <StyledTableRow>
-                                                                        <StyledTableCell>Date</StyledTableCell>
-                                                                        <StyledTableCell align="right">Status</StyledTableCell>
-                                                                    </StyledTableRow>
-                                                                </TableHead>
-                                                                <TableBody>
-                                                                    {allData.map((data, index) => {
-                                                                        const date = new Date(data.date);
-                                                                        const dateString = date.toString() !== "Invalid Date" ? date.toISOString().substring(0, 10) : "Invalid Date";
-                                                                        return (
-                                                                            <StyledTableRow key={index}>
-                                                                                <StyledTableCell>{dateString}</StyledTableCell>
-                                                                                <StyledTableCell align="right">{data.status}</StyledTableCell>
-                                                                            </StyledTableRow>
-                                                                        );
-                                                                    })}
-                                                                </TableBody>
-                                                            </Table>
+                                                            <Box sx={{ overflowX: 'auto', maxHeight: 250 }}>
+                                                                <Table size="small" aria-label="purchases">
+                                                                    <TableHead>
+                                                                        <StyledTableRow>
+                                                                            <StyledTableCell sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }} align="center" >
+                                                                                Date
+                                                                            </StyledTableCell>
+                                                                            <StyledTableCell  sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }} align="center">
+                                                                                Status
+                                                                            </StyledTableCell>
+                                                                        </StyledTableRow>
+                                                                    </TableHead>
+                                                                    <TableBody>
+                                                                        {allData.map((data, index) => {
+                                                                            const date = new Date(data.date);
+                                                                            const dateString = date.toString() !== "Invalid Date" ? date.toISOString().substring(0, 10) : "Invalid Date";
+                                                                            return (
+                                                                                <StyledTableRow key={index}>
+                                                                                    <StyledTableCell align="center">{dateString}</StyledTableCell>
+                                                                                    <StyledTableCell align="center">{data.status}</StyledTableCell>
+                                                                                </StyledTableRow>
+                                                                            );
+                                                                        })}
+                                                                    </TableBody>
+                                                                </Table>
+                                                            </Box>
+
                                                         </Box>
                                                     </Collapse>
                                                 </StyledTableCell>
                                             </StyledTableRow>
+                                        
+  
+
                                         </React.Fragment>
                                     );
                                 })}
@@ -714,10 +724,10 @@ const ViewStudent = () => {
             </Box>
         );
     };
-    
-    
-    
-    
+
+
+
+
 
     return (
         <div>
@@ -734,7 +744,7 @@ const ViewStudent = () => {
                 ) : (
                     <div>
                         <StudentDetailsAndAttendanceSection />
-                        
+
                     </div>
                 )}
             </Paper>
@@ -743,111 +753,6 @@ const ViewStudent = () => {
 };
 
 export default ViewStudent;
-
-// const styles = {
-//     licenseCard: {
-//         width: 350, // Adjust the width of the card
-//         padding: 2,
-//         margin: 'auto',
-//         borderRadius: '12px',
-//         border: '1px solid #ddd',
-//         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-//         display: 'flex',
-//         flexDirection: 'column',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         backgroundColor: '#f9f9f9',
-//     },
-//     cardTitle: {
-//         fontSize: 16,
-//         fontWeight: 'bold',
-//         marginBottom: 1,
-//         textAlign: 'center',
-//     },
-//     cardText: {
-//         fontSize: 14,
-//         marginBottom: 0.5,
-//     },
-//     chartContainer: {
-//         marginTop: 2,
-//         width: '100%', // Ensure the chart adjusts with the card width
-//         display: 'flex',
-//         justifyContent: 'center',
-//     },
-//     styledButton: {
-//         margin: 1,
-//         fontSize: '12px',
-//     },
-//     attendanceButton: {
-//         backgroundColor: "#673ab7",
-//         margin: 2
-//     }
-// };
-
-
-
-
-// const styles = {
-//     centeredContainer: {
-//         display: 'flex',
-//         justifyContent: 'center', // Center horizontally
-//         alignItems: 'center', // Center vertically
-//         minHeight: '100vh', // Full viewport height
-//         backgroundColor: '#f0f0f0', // Optional background to highlight the card
-//     },
-//     licenseCardWide: {
-//         display: 'flex',
-//         flexDirection: 'row',
-//         justifyContent: 'space-between',
-//         width: '80%', // Make the card wide
-//         maxWidth: 900, // Set a max width
-//         padding: 3,
-//         borderRadius: '12px',
-//         border: '1px solid #ddd',
-//         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-//         backgroundColor: '#ffffff',
-//     },
-//     cardContent: {
-//         display: 'flex',
-//         flexDirection: 'row',
-//         justifyContent: 'space-between',
-//         alignItems: 'center',
-//         width: '100%',
-//     },
-//     cardColumn: {
-//         display: 'flex',
-//         flexDirection: 'column',
-//         justifyContent: 'center',
-//         alignItems: 'flex-start',
-//     },
-//     cardTitle: {
-//         fontSize: 20,
-//         fontWeight: 'bold',
-//         marginBottom: 1,
-//     },
-//     cardText: {
-//         fontSize: 14,
-//         marginBottom: 0.5,
-//     },
-//     chartContainer: {
-//         width: 160, // Adjust the width of the chart to fit into the card
-//         height: 150, // Set the height of the chart
-//         display: 'flex',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//     },
-//     actionButtons: {
-//         display: 'flex',
-//         flexDirection: 'column',
-//         justifyContent: 'space-around',
-//         height: '100%',
-//     },
-//     styledButton: {
-//         margin: 1,
-//         fontSize: '12px',
-//         padding: '5px 10px',
-//     },
-// };
 
 
 const styles = {
@@ -861,12 +766,12 @@ const styles = {
     studentSectionContainer: {
         display: 'flex',
         flexDirection: 'row',
-        gap: '20px', // Space between the card and the table
-        alignItems: 'flex-start', // Align the card and the table at the top
-        width: '100%', // Ensure it takes full width
+        gap: '20px',
+        alignItems: 'flex-start',
+        width: '100%',
     },
     licenseCardSmall: {
-        width: '250px', // Make the card smaller
+        width: '250px',
         padding: '10px',
         borderRadius: '12px',
         border: '1px solid #ddd',
@@ -898,13 +803,13 @@ const styles = {
     },
     chartContainer: {
         width: '100%',
-        height: '250px', // Adjust the chart height
+        height: '250px',
         display: 'flex',
         justifyContent: 'center',
         marginTop: '-70px',
     },
     attendanceTableContainer: {
-        flex: 1, // Make the table take up the remaining space
+        flex: 1,
         padding: '20px',
         borderRadius: '12px',
         backgroundColor: '#ffffff',
