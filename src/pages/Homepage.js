@@ -69,9 +69,9 @@ const Homepage = () => {
                                         whileTap={{ scale: 0.95 }}
                                     >
                                         <StyledLink to="/chooseasguest">
-                                            <RippleButton variant="outlined" fullWidth>
+                                            {/* <RippleButton variant="outlined" fullWidth>
                                                 Login as Guest
-                                            </RippleButton>
+                                            </RippleButton> */}
                                         </StyledLink>
                                     </motion.div>
                                     <motion.p
