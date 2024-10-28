@@ -156,7 +156,7 @@ const SeeComplains = () => {
       ) : error ? (
         <Alert severity="error">An error occurred while loading complaints: {error.message}</Alert>
       ) : (
-        <Paper sx={{ width: '100%', margin: 'auto', padding: '16px', borderRadius: '12px', backgroundColor: '#e3f2fd' }}>
+        <Paper sx={{ width: '100%', margin: 'auto', padding: '16px', borderRadius: '12px', backgroundColor: '#a2d2ff' }}>
           {complainRows.length > 0 ? (
             <DataGrid
               rows={complainRows}
