@@ -247,10 +247,10 @@
 
 
 
+import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import SaveIcon from '@mui/icons-material/Save';
-import DownloadIcon from '@mui/icons-material/Download';
 import {
   Avatar,
   Box,
@@ -472,59 +472,60 @@ const StudentProfile = () => {
             </Grid>
 
             {/* Profile Details */}
-            <Grid item xs={12}>
-              <Box display="flex" flexDirection="column" gap={2}>
-                {editMode ? (
-                  <>
-                    <InputField
-                      label="Student Roll No"
-                      variant="outlined"
-                      value={userData.rollNum}
-                      onChange={(e) => setUserData({ ...userData, rollNum: e.target.value })}
-                    />
-                    <InputField
-                      label="Class"
-                      variant="outlined"
-                      value={userData.sclassName}
-                      onChange={(e) => setUserData({ ...userData, sclassName: e.target.value })}
-                    />
-                    <InputField
-                      label="School"
-                      variant="outlined"
-                      value={userData.schoolName}
-                      onChange={(e) => setUserData({ ...userData, schoolName: e.target.value })}
-                    />
-                    <InputField
-                      label="Home Address"
-                      variant="outlined"
-                      value={userData.address}
-                      onChange={(e) => setUserData({ ...userData, address: e.target.value })}
-                    />
-                    <InputField
-                      label="Phone Number"
-                      variant="outlined"
-                      value={userData.phone}
-                      onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
-                    />
-                    <InputField
-                      label="Emergency Contact"
-                      variant="outlined"
-                      value={userData.emergencyContact}
-                      onChange={(e) => setUserData({ ...userData, emergencyContact: e.target.value })}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Typography variant="body1">Roll No: {userData.rollNum}</Typography>
-                    <Typography variant="body1">Class: {userData.sclassName}</Typography>
-                    <Typography variant="body1">School: {userData.schoolName}</Typography>
-                    <Typography variant="body1">Address: {userData.address}</Typography>
-                    <Typography variant="body1">Phone: {userData.phone}</Typography>
-                    <Typography variant="body1">Emergency Contact: {userData.emergencyContact}</Typography>
-                  </>
-                )}
-              </Box>
-            </Grid>
+<Grid item xs={12}>
+  <Box display="flex" flexDirection="column" gap={2}>
+    {editMode ? (
+      <>
+        <InputField
+          label="Student Roll No"
+          variant="outlined"
+          value={userData.rollNum}
+          onChange={(e) => setUserData({ ...userData, rollNum: e.target.value })}
+        />
+        <InputField
+          label="Class"
+          variant="outlined"
+          value={userData.sclassName}
+          onChange={(e) => setUserData({ ...userData, sclassName: e.target.value })}
+        />
+        <InputField
+          label="School"
+          variant="outlined"
+          value={userData.schoolName}
+          onChange={(e) => setUserData({ ...userData, schoolName: e.target.value })}
+        />
+        <InputField
+          label="Home Address"
+          variant="outlined"
+          value={userData.address}
+          onChange={(e) => setUserData({ ...userData, address: e.target.value })}
+        />
+        <InputField
+          label="Phone Number"
+          variant="outlined"
+          value={userData.phone}
+          onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
+        />
+        <InputField
+          label="Emergency Contact"
+          variant="outlined"
+          value={userData.emergencyContact}
+          onChange={(e) => setUserData({ ...userData, emergencyContact: e.target.value })}
+        />
+      </>
+    ) : (
+      <>
+        <Typography variant="body1"><strong>Roll No:</strong> {userData.rollNum}</Typography>
+        <Typography variant="body1"><strong>Class:</strong> {userData.sclassName}</Typography>
+        <Typography variant="body1"><strong>School:</strong> {userData.schoolName}</Typography>
+        <Typography variant="body1"><strong>Address:</strong> {userData.address}</Typography>
+        <Typography variant="body1"><strong>Phone:</strong> {userData.phone}</Typography>
+        <Typography variant="body1"><strong>Emergency Contact:</strong> {userData.emergencyContact}</Typography>
+      </>
+    )}
+  </Box>
+</Grid>
+
           </Grid>
 
           {editMode && (
