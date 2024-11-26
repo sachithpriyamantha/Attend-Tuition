@@ -64,7 +64,7 @@ const AddClass = () => {
                         <img
                             src={Classroom}
                             alt="classroom"
-                            style={{ width: '80%' }}
+                            style={{ width: '90%' }}
                         />
                     </Stack>
                     <form onSubmit={submitHandler}>
@@ -113,7 +113,7 @@ const StyledBox = styled(Box)`
   max-width: 550px;
   padding: 50px 3rem 50px;
   margin-top: 1rem;
-  background-color: white;
+  background-color: #a8d4fc;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   border: 1px solid #ccc;
   border-radius: 4px;

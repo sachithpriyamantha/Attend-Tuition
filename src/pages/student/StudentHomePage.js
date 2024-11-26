@@ -24,7 +24,7 @@ const StudentHomePage = () => {
         dispatch(getUserDetails(currentUser._id, "Student"));
         dispatch(getSubjectList(classID, "ClassSubjects"));
     }, [dispatch, currentUser._id, classID]);
-
+ 
     useEffect(() => {
         if (userDetails) {
             setSubjectAttendance(userDetails.attendance || []);
@@ -154,7 +154,7 @@ const StyledPaper = styled.div`
 const BottomRightImageWrapper = styled.div`
     position: fixed;
     bottom: -10px;
-    right: -120px;
+    right: 200px;
     z-index: 1;
 `;
 
@@ -167,7 +167,7 @@ const BottomRightImageStyled = styled.img`
 const BottomLeftImageWrapper = styled.div`
     position: fixed;
     bottom: -10px;
-    left: -60px;
+    left: 210px;
     z-index: 1;
 `;
 

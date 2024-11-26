@@ -128,7 +128,7 @@ const ShowTeachers = () => {
                 </GreenButton>
             </Box>
 
-            <Paper sx={{ width: '90%', margin: 'auto', overflow: 'hidden', padding: '16px', borderRadius: '12px', backgroundColor: '#a2d2ff' }}>
+            <Paper sx={{ width: '95%', margin: 'auto', overflow: 'hidden', padding: '16px', borderRadius: '12px', backgroundColor: '#a2d2ff' }}>
                 {!loading && Array.isArray(filteredRows) && filteredRows.length > 0 ? (
                     <DataGrid
                         rows={filteredRows}

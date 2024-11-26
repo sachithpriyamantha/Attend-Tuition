@@ -85,7 +85,7 @@ const ShowClasses = () => {
         </GreenButton>
       </Box>
 
-      <Paper sx={{ width: '80%', margin: 'auto', overflow: 'hidden', padding: '16px', borderRadius: '12px', backgroundColor: '#a2d2ff' }}>
+      <Paper sx={{ width: '95%', margin: 'auto', overflow: 'hidden', padding: '16px', borderRadius: '12px', backgroundColor: '#a2d2ff' }}>
         {!loading && Array.isArray(sclassRows) && sclassRows.length > 0 ? (
           <DataGrid
             rows={sclassRows}

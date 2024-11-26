@@ -2,7 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSubjectList } from '../../redux/sclassRelated/sclassHandle';
 import { getUserDetails } from '../../redux/userRelated/userHandle';
-import { AppBar, Tabs, Tab, Container, Box, Typography, CircularProgress, Grid, Card, CardContent, Fade, Zoom } from '@mui/material';
+import {
+    AppBar,
+    Tabs,
+    Tab,
+    Container,
+    Box,
+    Typography,
+    CircularProgress,
+    Grid,
+    Card,
+    CardContent,
+    Fade,
+    Zoom,
+    Avatar,
+} from '@mui/material';
 import CustomBarChart from '../../components/CustomBarChart';
 
 const StudentSubjects = () => {
@@ -14,7 +28,7 @@ const StudentSubjects = () => {
     const [selectedTab, setSelectedTab] = useState(0);
 
     useEffect(() => {
-        dispatch(getUserDetails(currentUser._id, "Student"));
+        dispatch(getUserDetails(currentUser._id, 'Student'));
     }, [dispatch, currentUser._id]);
 
     useEffect(() => {
@@ -25,35 +39,46 @@ const StudentSubjects = () => {
 
     useEffect(() => {
         if (subjectMarks.length === 0) {
-            dispatch(getSubjectList(currentUser.sclassName._id, "ClassSubjects"));
+            dispatch(getSubjectList(currentUser.sclassName._id, 'ClassSubjects'));
         }
     }, [subjectMarks, dispatch, currentUser.sclassName._id]);
 
+    const handleTabChange = (event, newValue) => {
+        setSelectedTab(newValue);
+    };
+
     const renderClassDetailsSection = () => (
-        <Fade in timeout={1000}>
-            <Box sx={{ padding: 2 }}>
+        <Fade in timeout={800}>
+            <Box sx={{ padding: 3 }}>
                 <Typography variant="h4" align="center" gutterBottom>
                     Class Details
                 </Typography>
-                <Typography variant="h5" align="center" gutterBottom>
-                    You are currently in Class {sclassDetails && sclassDetails.sclassName}
+                <Typography variant="h6" align="center" color="text.secondary" gutterBottom>
+                    You are currently in Class <strong>{sclassDetails?.sclassName || 'N/A'}</strong>
                 </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 2 }}>
-                    <Typography variant="h6" gutterBottom>
-                        Subjects Enrolled:
-                    </Typography>
+                <Box sx={{ marginTop: 4 }}>
                     <Grid container spacing={3}>
                         {subjectsList.length > 0 ? (
                             subjectsList.map((subject, index) => (
                                 <Grid item xs={12} sm={6} md={4} key={index}>
-                                    <Zoom in timeout={1000}>
-                                        <Card sx={{ backgroundColor: '#e3f2fd', borderRadius: '12px', boxShadow: 3 }}>
+                                    <Zoom in timeout={800}>
+                                        <Card
+                                            sx={{
+                                                backgroundColor: '#a8d4fc',
+                                                borderRadius: '16px',
+                                                boxShadow: 3,
+                                                textAlign: 'center',
+                                            }}
+                                        >
                                             <CardContent>
-                                                <Typography variant="subtitle1" gutterBottom>
-                                                    {subject.subName} ({subject.subCode})
+                                                <Avatar sx={{ margin: '0 auto', bgcolor: '#007bb2' }}>
+                                                    {subject.subName.charAt(0)}
+                                                </Avatar>
+                                                <Typography variant="h6" mt={2}>
+                                                    {subject.subName}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    {/* Additional details can be added here */}
+                                                <Typography variant="subtitle2" color="text.secondary">
+                                                    {subject.subCode}
                                                 </Typography>
                                             </CardContent>
                                         </Card>
@@ -61,7 +86,9 @@ const StudentSubjects = () => {
                                 </Grid>
                             ))
                         ) : (
-                            <Typography>No subjects available.</Typography>
+                            <Typography variant="h6" color="text.secondary">
+                                No subjects available.
+                            </Typography>
                         )}
                     </Grid>
                 </Box>
@@ -70,49 +97,57 @@ const StudentSubjects = () => {
     );
 
     const renderMarksSection = () => (
-        <Fade in timeout={1000}>
-            <Grid container spacing={3}>
-                {subjectMarks.length > 0 ? (
-                    subjectMarks.map((result, index) => {
-                        if (!result.subName || !result.marksObtained) {
-                            return null;
-                        }
-                        return (
+        <Fade in timeout={800}>
+            <Box sx={{ padding: 3 }}>
+                <Typography variant="h4" align="center" gutterBottom>
+                    Subject Marks
+                </Typography>
+                <Grid container spacing={3}>
+                    {subjectMarks.length > 0 ? (
+                        subjectMarks.map((result, index) => (
                             <Grid item xs={12} sm={6} md={4} key={index}>
-                                <Zoom in timeout={1000}>
-                                    <Card sx={{ backgroundColor: '#e3f2fd', borderRadius: '12px', boxShadow: 3 }}>
+                                <Zoom in timeout={800}>
+                                    <Card
+                                        sx={{
+                                            backgroundColor: '#a8d4fc',
+                                            borderRadius: '16px',
+                                            boxShadow: 3,
+                                        }}
+                                    >
                                         <CardContent>
-                                            <Typography variant="h6" gutterBottom>
-                                                {result.subName.subName}
+                                            <Typography variant="h6" color="primary" gutterBottom>
+                                                {result.subName?.subName || 'Unknown Subject'}
                                             </Typography>
-                                            <Typography variant="body1">Marks: {result.marksObtained}</Typography>
+                                            <Typography variant="h5">
+                                                {result.marksObtained} / 100
+                                            </Typography>
                                         </CardContent>
                                     </Card>
                                 </Zoom>
                             </Grid>
-                        );
-                    })
-                ) : (
-                    <Typography>No marks available.</Typography>
-                )}
-            </Grid>
-        </Fade>
-    );
-
-    const renderChartSection = () => (
-        <Fade in timeout={1000}>
-            <Box sx={{ padding: 2 }}>
-                <Typography variant="h4" align="center" gutterBottom>
-                    Marks Chart
-                </Typography>
-                <CustomBarChart chartData={subjectMarks} dataKey="marksObtained" />
+                        ))
+                    ) : (
+                        <Typography variant="h6" color="text.secondary">
+                            No marks available.
+                        </Typography>
+                    )}
+                </Grid>
             </Box>
         </Fade>
     );
 
-    const handleTabChange = (event, newValue) => {
-        setSelectedTab(newValue);
-    };
+    const renderChartSection = () => (
+        <Fade in timeout={800}>
+            <Box sx={{ padding: 3 }}>
+                <Typography variant="h4" align="center" gutterBottom>
+                    Marks Chart
+                </Typography>
+                <Box sx={{ marginTop: 4 }}>
+                    <CustomBarChart chartData={subjectMarks} dataKey="marksObtained" />
+                </Box>
+            </Box>
+        </Fade>
+    );
 
     const renderContent = () => {
         switch (selectedTab) {
@@ -129,19 +164,32 @@ const StudentSubjects = () => {
 
     return (
         <Container>
-            <AppBar position="static">
-                <Tabs value={selectedTab} onChange={handleTabChange} textColor="inherit" indicatorColor="secondary">
+            <AppBar position="static" sx={{ backgroundColor: '#007bb2' }}>
+                <Tabs
+                    value={selectedTab}
+                    onChange={handleTabChange}
+                    textColor="inherit"
+                    indicatorColor="secondary"
+                    variant="fullWidth"
+                >
                     <Tab label="Class Details" />
                     <Tab label="Subject Marks" />
                     <Tab label="Marks Chart" />
                 </Tabs>
             </AppBar>
 
-            <Box sx={{ padding: 2 }}>
+            <Box sx={{ padding: 3 }}>
                 {loading ? (
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                        <CircularProgress />
-                    </div>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '70vh',
+                        }}
+                    >
+                        <CircularProgress sx={{ color: '#007bb2' }} />
+                    </Box>
                 ) : (
                     renderContent()
                 )}

@@ -8,6 +8,7 @@ import {
     Divider,
     IconButton,
 } from '@mui/material';
+import SeeComplains from '../admin/studentRelated/SeeComplains';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import TeacherSideBar from './TeacherSideBar';
@@ -78,8 +79,9 @@ const TeacherDashboard = () => {
                         <Route path='*' element={<Navigate to="/" />} />
                         <Route path="/Teacher/dashboard" element={<TeacherHomePage />} />
                         <Route path="/Teacher/profile" element={<TeacherProfile />} />
+                        <Route path="/Teacher/complain" element={<SeeComplains />} />
 
-                        <Route path="/Teacher/complain" element={<TeacherComplain />} />
+                        {/* <Route path="/Teacher/complain" element={<TeacherComplain />} /> */}
 
                         <Route path="/Teacher/class" element={<TeacherClassDetails />} />
                         <Route path="/Teacher/class/student/:id" element={<TeacherViewStudent />} />

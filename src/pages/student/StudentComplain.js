@@ -67,20 +67,20 @@ const StudentComplain = () => {
                     alignItems: 'center',
                     display: 'flex',
                     justifyContent: 'center',
-                    minHeight: '100vh',
+                    minHeight: '50vh',
                     background: '#f5f5f5', // Light gray background
                     padding: 4,
                 }}
             >
                 <Box
                     sx={{
-                        maxWidth: 550,
+                        maxWidth: 850,
                         px: 3,
                         py: 4,
-                        width: '100%',
+                        width: '1100%',
                         borderRadius: 2,
                         boxShadow: 3,
-                        backgroundColor: '#ffffff', // White background for the form
+                        backgroundColor: '#a8d4fc', // White background for the form
                         animation: `${fadeIn} 0.5s ease-in-out`, // Apply fadeIn animation
                     }}
                 >

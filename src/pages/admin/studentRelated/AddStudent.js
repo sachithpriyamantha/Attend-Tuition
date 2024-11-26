@@ -364,7 +364,7 @@ import { underControl } from '../../../redux/userRelated/userSlice';
 const styles = {
     cardAnimation: {
         animation: 'slideIn 0.8s ease-out',
-        backgroundColor: '#8fedf1',
+        backgroundColor: '#a8d4fc',
         boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', 
     },
     '@keyframes slideIn': {

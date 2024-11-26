@@ -67,7 +67,7 @@ const ChooseClass = ({ situation }) => {
                         :
                         <>
                             <Typography variant="h6" gutterBottom component="div">
-                                Choose a class
+                                Choose a clas
                             </Typography>
                             {Array.isArray(sclassesList) && sclassesList.length > 0 &&
                                 <TableTemplate buttonHaver={SclassButtonHaver} columns={sclassColumns} rows={sclassRows} />
