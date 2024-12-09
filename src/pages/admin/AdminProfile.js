@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Collapse, TextField, Typography, Box, IconButton, Fade, Grid, Paper } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { deleteUser, updateUser } from '../../redux/userRelated/userHandle';
+import { deleteUser, updateUser,getUserDetails  } from '../../redux/userRelated/userHandle';
 import { useNavigate } from 'react-router-dom';
 import { authLogout } from '../../redux/userRelated/userSlice';
 
@@ -12,10 +12,18 @@ const AdminProfile = () => {
     const [email, setEmail] = useState('');
     const [schoolName, setSchoolName] = useState('');
     const [password, setPassword] = useState('');
-    const { currentUser } = useSelector((state) => state.user);
+    //const { currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const currentUser = useSelector((state) => state.user.currentUser);
 
+    useEffect(() => {
+        if (currentUser) {
+            dispatch(getUserDetails(currentUser._id, 'Admin')); 
+        }
+    }, [dispatch, currentUser]); // React to changes in the currentUser state
+    
+    
     useEffect(() => {
         if (currentUser) {
             setName(currentUser.name);
@@ -24,13 +32,26 @@ const AdminProfile = () => {
         }
     }, [currentUser]);
 
-    const handleUpdate = (event) => {
-        event.preventDefault();
-        const updatedFields = password ? { name, email, password, schoolName } : { name, email, schoolName };
-        dispatch(updateUser(updatedFields, currentUser._id));
-        setShowEdit(false);
-    };
 
+    const handleUpdate = async (event) => {
+        event.preventDefault();
+        const updatedFields = { name, email, schoolName, password: password || undefined };
+    
+        try {
+            await dispatch(updateUser(updatedFields, currentUser._id));
+    
+            // Immediately update local state
+            setName(updatedFields.name);
+            setEmail(updatedFields.email);
+            setSchoolName(updatedFields.schoolName);
+            setPassword('');
+        } catch (error) {
+            console.error("Failed to update admin:", error);
+        }
+    };
+    
+    
+    
     const handleDelete = () => {
         dispatch(deleteUser(currentUser._id));
         dispatch(authLogout());
@@ -39,77 +60,89 @@ const AdminProfile = () => {
 
     return (
         <Box sx={styles.container}>
-            <Typography variant="h4" sx={styles.header}>Admin Profile</Typography>
-            <Grid container spacing={3} justifyContent="center">
-                <Grid item xs={12} md={6}>
-                    <Paper elevation={3} sx={styles.profileCard}>
-                        <Box sx={styles.profileInfo}>
-                            <Typography variant="h6">Name: <span>{currentUser.name}</span></Typography>
-                            <Typography variant="h6">Email: <span>{currentUser.email}</span></Typography>
-                            <Typography variant="h6">School: <span>{currentUser.schoolName}</span></Typography>
-                        </Box>
+        <Typography variant="h4" sx={styles.header}>Admin Profile</Typography>
+        <Grid container spacing={3} justifyContent="center">
+            <Grid item xs={12} md={6}>
+                <Paper elevation={3} sx={styles.profileCard}>
+                    <Box sx={styles.profileInfo}>
+                        <Typography variant="h6">Name: <span>{currentUser?.name}</span></Typography>
+                        <Typography variant="h6">Email: <span>{currentUser?.email}</span></Typography>
+                        <Typography variant="h6">School: <span>{currentUser?.schoolName}</span></Typography>
+                    </Box>
 
-                        <Box sx={styles.buttonGroup}>
-                            <Button variant="contained" color="error" onClick={handleDelete} sx={styles.deleteButton}>
-                                Delete Account
-                            </Button>
-                            <IconButton onClick={() => setShowEdit(!showEdit)} sx={styles.toggleButton}>
-                                {showEdit ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-                            </IconButton>
-                            <Button variant="outlined" onClick={() => setShowEdit(!showEdit)} sx={styles.editButton}>
-                                {showEdit ? 'Cancel Edit' : 'Edit Profile'}
-                            </Button>
-                        </Box>
+                    <Box sx={styles.buttonGroup}>
+                        <Button 
+                            variant="contained" 
+                            color="error" 
+                            onClick={handleDelete} 
+                            sx={styles.deleteButton}>
+                            Delete Account
+                        </Button>
 
-                        <Collapse in={showEdit} timeout="auto">
-                            <Fade in={showEdit}>
-                                <form onSubmit={handleUpdate} style={styles.editForm}>
-                                    <Typography variant="h5" sx={styles.formTitle}>Edit Profile</Typography>
-                                    <TextField
-                                        label="Name"
-                                        variant="outlined"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                        sx={styles.textField}
-                                        required
-                                        margin="normal"  // Added margin for spacing
-                                    />
-                                    <TextField
-                                        label="School Name"
-                                        variant="outlined"
-                                        value={schoolName}
-                                        onChange={(e) => setSchoolName(e.target.value)}
-                                        sx={styles.textField}
-                                        required
-                                        margin="normal"  // Added margin for spacing
-                                    />
-                                    <TextField
-                                        label="Email"
-                                        type="email"
-                                        variant="outlined"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        sx={styles.textField}
-                                        required
-                                        margin="normal"  // Added margin for spacing
-                                    />
-                                    <TextField
-                                        label="Password"
-                                        type="password"
-                                        variant="outlined"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        sx={styles.textField}
-                                        margin="normal"  // Added margin for spacing
-                                    />
-                                    <Button type="submit" variant="contained" sx={styles.submitButton}>Update</Button>
-                                </form>
-                            </Fade>
-                        </Collapse>
-                    </Paper>
-                </Grid>
+                        <IconButton onClick={() => setShowEdit(!showEdit)} sx={styles.toggleButton}>
+                            {showEdit ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                        </IconButton>
+
+                        <Button 
+                            variant="outlined" 
+                            onClick={() => setShowEdit(!showEdit)} 
+                            sx={styles.editButton}>
+                            {showEdit ? 'Cancel Edit' : 'Edit Profile'}
+                        </Button>
+                    </Box>
+
+                    <Collapse in={showEdit} timeout="auto">
+                        <Fade in={showEdit}>
+                            <form onSubmit={handleUpdate} style={styles.editForm}>
+                                <Typography variant="h5" sx={styles.formTitle}>Edit Profile</Typography>
+                                
+                                <TextField
+                                    label="Name"
+                                    variant="outlined"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    sx={styles.textField}
+                                    required
+                                />
+
+                                <TextField
+                                    label="School Name"
+                                    variant="outlined"
+                                    value={schoolName}
+                                    onChange={(e) => setSchoolName(e.target.value)}
+                                    sx={styles.textField}
+                                    required
+                                />
+
+                                <TextField
+                                    label="Email"
+                                    type="email"
+                                    variant="outlined"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    sx={styles.textField}
+                                    required
+                                />
+
+                                <TextField
+                                    label="Password"
+                                    type="password"
+                                    variant="outlined"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    sx={styles.textField}
+                                />
+
+                                <Button type="submit" variant="contained" sx={styles.submitButton}>
+                                    Update
+                                </Button>
+                            </form>
+                        </Fade>
+                    </Collapse>
+                </Paper>
             </Grid>
-        </Box>
+        </Grid>
+    </Box>
     );
 };
 

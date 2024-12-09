@@ -16,6 +16,20 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
+
+        authSuccess(state, action) {
+            state.currentUser = action.payload;
+            state.currentRole = action.payload.role;
+            localStorage.setItem('user', JSON.stringify(action.payload));
+        },
+        UPDATE_USER_SUCCESS(state, action) {
+            state.currentUser = action.payload;
+            state.currentRole = action.payload.role;
+            localStorage.setItem('user', JSON.stringify(action.payload));
+        },
+        UPDATE_USER_FAILURE(state, action) {
+            state.error = action.payload;
+        },
         authRequest: (state) => {
             state.status = 'loading';
         },
@@ -48,9 +62,9 @@ const userSlice = createSlice({
         authLogout: (state) => {
             localStorage.removeItem('user');
             state.currentUser = null;
+            state.currentRole = null;
             state.status = 'idle';
             state.error = null;
-            state.currentRole = null
         },
 
         doneSuccess: (state, action) => {
@@ -95,7 +109,7 @@ export const {
     getDeleteSuccess,
     getRequest,
     getFailed,
-    getError,
+    getError, UPDATE_USER_SUCCESS, UPDATE_USER_FAILURE,
     toggleDarkMode
 } = userSlice.actions;
 

@@ -9,7 +9,8 @@ import {
     getError,
     getFailed,
     getRequest,
-    stuffAdded
+    stuffAdded, UPDATE_USER_SUCCESS,   
+    UPDATE_USER_FAILURE,  
 } from './userSlice';
 
 export const loginUser = (fields, role) => async (dispatch) => {
@@ -86,23 +87,47 @@ export const deleteUser = (id, address) => async (dispatch) => {
 };
 
 
-export const updateUser = (fields, id, address) => async (dispatch) => {
+// export const updateUser = (fields, id, address) => async (dispatch) => {
+//     dispatch(getRequest());
+
+//     try {
+//         const result = await axios.put(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`, fields, {
+//             headers: { 'Content-Type': 'application/json' },
+//         });
+//         if (result.data.schoolName) {
+//             dispatch(authSuccess(result.data));
+//         }
+//         else {
+//             dispatch(doneSuccess(result.data));
+//         }
+//     } catch (error) {
+//         dispatch(getError(error));
+//     }
+// }
+
+
+export const updateUser = (updatedFields, userId) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
-        const result = await axios.put(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`, fields, {
-            headers: { 'Content-Type': 'application/json' },
-        });
-        if (result.data.schoolName) {
-            dispatch(authSuccess(result.data));
-        }
-        else {
-            dispatch(doneSuccess(result.data));
+        const response = await axios.put(
+            `${process.env.REACT_APP_BASE_URL}/Admin/${userId}`, 
+            updatedFields, 
+            { headers: { 'Content-Type': 'application/json' } }
+        );
+
+        if (response.data) {
+            dispatch(UPDATE_USER_SUCCESS(response.data)); // Correct action
+        } else {
+            throw new Error("Failed to update user");
         }
     } catch (error) {
-        dispatch(getError(error));
+        dispatch(UPDATE_USER_FAILURE(error.message));
     }
-}
+};
+
+
+
 
 export const addStuff = (fields, address) => async (dispatch) => {
     dispatch(authRequest());
