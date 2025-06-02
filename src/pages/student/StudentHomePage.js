@@ -87,14 +87,14 @@ const StudentHomePage = () => {
             </Grid>
 
             {/* Bottom Right Image */}
-            <BottomRightImageWrapper>
+            {/* <BottomRightImageWrapper>
                 <BottomRightImageStyled src={BottomRightImage} alt="Bottom Right" />
-            </BottomRightImageWrapper>
+            </BottomRightImageWrapper> */}
 
             {/* Bottom Left Image */}
-            <BottomLeftImageWrapper>
+            {/* <BottomLeftImageWrapper>
                 <BottomLeftImageStyled src={Teachers} alt="Bottom Left" />
-            </BottomLeftImageWrapper>
+            </BottomLeftImageWrapper> */}
         </Container>
     );
 };
@@ -159,7 +159,7 @@ const BottomRightImageWrapper = styled.div`
 `;
 
 const BottomRightImageStyled = styled.img`
-    width: 460px;
+    width: 160px;
     height: auto;
 `;
 
@@ -172,7 +172,7 @@ const BottomLeftImageWrapper = styled.div`
 `;
 
 const BottomLeftImageStyled = styled.img`
-    width: 460px;
+    width: 160px;
     height: auto;
 `;
 const Data = styled(CountUp)`

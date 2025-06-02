@@ -8,6 +8,7 @@ import TeacherDashboard from './pages/teacher/TeacherDashboard';
 import LoginPage from './pages/LoginPage';
 import AdminRegisterPage from './pages/admin/AdminRegisterPage';
 import ChooseUser from './pages/ChooseUser';
+import ChatBot from './components/ChatBot.jsx';
 
 const App = () => {
   const { currentRole } = useSelector(state => state.user);
@@ -28,7 +29,7 @@ const App = () => {
 
           <Route path='*' element={<Navigate to="/" />} />
         </Routes>}
-
+<ChatBot />
       {currentRole === "Admin" &&
         <>
           <AdminDashboard />
@@ -47,7 +48,9 @@ const App = () => {
         </>
       }
     </Router>
+    
   )
+  
 }
 
 export default App

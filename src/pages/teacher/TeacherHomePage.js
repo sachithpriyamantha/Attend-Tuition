@@ -9,6 +9,7 @@ import Time from "../../assets/time.gif";
 import { getClassStudents, getSubjectDetails } from '../../redux/sclassRelated/sclassHandle';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import FileUpload  from '../admin/noticeRelated/FileUpload'
 
 const TeacherHomePage = () => {
     const dispatch = useDispatch();
@@ -61,9 +62,16 @@ const TeacherHomePage = () => {
                 <Grid item xs={12}>
                     <StyledNoticePaper>
                         <SeeNotice />
+                        
+                    </StyledNoticePaper>
+                </Grid>
+                <Grid item xs={12}>
+                    <StyledNoticePaper>
+                        <FileUpload />
                     </StyledNoticePaper>
                 </Grid>
             </Grid>
+
         </Container>
     );
 };

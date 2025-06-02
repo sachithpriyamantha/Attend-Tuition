@@ -28,6 +28,7 @@ const Content = styled.div`
   max-width: 800px;
   padding: 20px;
   text-align: center;
+ 
 `;
 
 const Heading = styled.h1`

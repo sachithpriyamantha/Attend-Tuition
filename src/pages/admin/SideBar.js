@@ -8,10 +8,11 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HomeIcon from "@mui/icons-material/Home";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import PersonOutlineIcon from "@mui/icons-material/SupervisorAccountOutlined";
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import ReportIcon from '@mui/icons-material/Report';
-import SupervisorAccountOutlinedIcon from '@mui/icons-material/SupervisorAccountOutlined';
+import Attachment from '@mui/icons-material/Attachment';
+import SupervisorAccountOutlinedIcon from '@mui/icons-material/Groups2';
 
 const SideBar = () => {
     const location = useLocation();
@@ -46,13 +47,13 @@ const SideBar = () => {
                 </ListItemButton>
                 <ListItemButton component={Link} to="/Admin/teachers">
                     <ListItemIcon>
-                        <SupervisorAccountOutlinedIcon color={location.pathname.startsWith("/Admin/teachers") ? 'primary' : 'inherit'} />
+                        <PersonOutlineIcon color={location.pathname.startsWith("/Admin/teachers") ? 'primary' : 'inherit'} />
                     </ListItemIcon>
                     <ListItemText primary="Teachers" />
                 </ListItemButton>
                 <ListItemButton component={Link} to="/Admin/students">
                     <ListItemIcon>
-                        <PersonOutlineIcon color={location.pathname.startsWith("/Admin/students") ? 'primary' : 'inherit'} />
+                        <SupervisorAccountOutlinedIcon color={location.pathname.startsWith("/Admin/students") ? 'primary' : 'inherit'} />
                     </ListItemIcon>
                     <ListItemText primary="Students" />
                 </ListItemButton>
@@ -68,6 +69,14 @@ const SideBar = () => {
                     </ListItemIcon>
                     <ListItemText primary="Complains" />
                 </ListItemButton>
+                <ListItemButton component={Link} to="/Admin/attachment">
+                    <ListItemIcon>
+                        <Attachment color={location.pathname.startsWith("/Admin/attachment") ? 'primary' : 'inherit'} />
+                    </ListItemIcon>
+                    <ListItemText primary="Attachment" />
+                </ListItemButton>
+                
+
             </React.Fragment>
             <Divider sx={{ my: 1 }} />
             <React.Fragment>

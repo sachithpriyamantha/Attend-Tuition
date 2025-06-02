@@ -16,6 +16,7 @@
     "formik": "^2.4.6",
     "qrcode.react": "^4.0.1",
     "react-countup": "^6.4.2",
+    "react-hot-toast": "^2.5.2",
     "react-phone-number-input": "^3.4.8",
     "react-qr-code": "^2.0.15",
     "react-qr-reader": "^3.0.0-beta-1",
