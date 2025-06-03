@@ -246,10 +246,10 @@ const AdminHomePage = () => {
                 </Grid>
                 
                 {/* Bottom decorative images  */}
-                <DecorationWrapper>
+                {/* <DecorationWrapper>
                     <BottomLeftImageStyled src={BottomlefttImage} alt="Bottom Left" />
                     <BottomRightImageStyled src={BottomRightImage} alt="Bottom Right" />
-                </DecorationWrapper> 
+                </DecorationWrapper>  */}
             </Container>
         </BackgroundContainer>
     );
