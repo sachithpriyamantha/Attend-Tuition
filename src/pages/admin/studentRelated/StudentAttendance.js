@@ -670,430 +670,9 @@
 
 
 
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CircularProgress,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Snackbar,
-  Alert,
-  Paper,
-  Divider,
-  Avatar
-} from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { QrReader } from 'react-qr-reader';
-import { useDispatch, useSelector } from 'react-redux';
-import { getSubjectList } from '../../../redux/sclassRelated/sclassHandle';
-import { updateStudentFields } from '../../../redux/studentRelated/studentHandle';
-import MenuIcon from '@mui/icons-material/Menu';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import ReportIcon from '@mui/icons-material/Assessment';
-import SettingsIcon from '@mui/icons-material/Settings';
-import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import SubjectIcon from '@mui/icons-material/Subject';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
-const AdminAttendance = () => {
-  const dispatch = useDispatch();
-  const { subjectsList } = useSelector((state) => state.sclass);
-  const [scanResult, setScanResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [subjectName, setSubjectName] = useState('');
-  const [chosenSubName, setChosenSubName] = useState('');
-  const [date, setDate] = useState('');
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  
-  useEffect(() => {
-    dispatch(getSubjectList("classOrRelevantIdentifier", "ClassSubjects"));
-  }, [dispatch]);
-
-  const handleScan = (data) => {
-    if (data) {
-      setScanResult(data);
-      setSnackbarMessage("QR Code scanned successfully!");
-      setSnackbarOpen(true);
-      setErrorMessage('');
-      setLoading(false);
-    }
-  };
-
-  const handleError = (err) => {
-    setLoading(false);
-    console.error(err);
-  };
-
-  const handleAddAttendance = () => {
-    if (scanResult && chosenSubName && date) {
-      const fields = {
-        status: 'Present',
-        date,
-        subName: chosenSubName,
-      };
-      dispatch(updateStudentFields(scanResult, fields, 'StudentAttendance'));
-      setErrorMessage('');
-      setScanResult(null);
-      setSnackbarMessage("Attendance recorded successfully!");
-      setSnackbarOpen(true);
-    } else {
-      setErrorMessage('Please complete all fields and scan a QR code');
-    }
-  };
-
-  const handleSubjectChange = (event) => {
-    const selectedSubject = subjectsList.find(
-      (subject) => subject.subName === event.target.value
-    );
-    setSubjectName(selectedSubject.subName);
-    setChosenSubName(selectedSubject._id);
-  };
-
-  const toggleDrawer = () => {
-    setDrawerOpen(!drawerOpen);
-  };
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-
-  const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon /> },
-    { text: 'Attendance', icon: <AssignmentIcon /> },
-    { text: 'Reports', icon: <ReportIcon /> },
-    { text: 'Settings', icon: <SettingsIcon /> }
-  ];
-
-  return (
-    <Box display="flex" minHeight="100vh" bgcolor="#f5f7fa">
-      <AppBar 
-        position="fixed" 
-        sx={{ 
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          backgroundColor: 'white',
-          color: '#3f51b5',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={toggleDrawer}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 600 }}>
-            Attendance Portal
-          </Typography>
-          <Avatar sx={{ bgcolor: '#3f51b5' }}>A</Avatar>
-        </Toolbar>
-      </AppBar>
-
-      <Drawer 
-        variant="temporary"
-        open={drawerOpen}
-        onClose={toggleDrawer}
-        sx={{
-          '& .MuiDrawer-paper': {
-            width: 240,
-            boxSizing: 'border-box',
-            backgroundColor: '#3f51b5',
-            color: 'white'
-          },
-        }}
-      >
-        <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
-          <List>
-            {menuItems.map((item) => (
-              <ListItem button key={item.text} sx={{
-                '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.1)'
-                }
-              }}>
-                <ListItemIcon sx={{ color: 'white' }}>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Drawer>
-
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          marginTop: '64px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
-        <Paper 
-          elevation={3} 
-          sx={{
-            width: '100%',
-            maxWidth: '800px',
-            borderRadius: '16px',
-            overflow: 'hidden',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
-          }}
-        >
-          <Box 
-            sx={{
-              backgroundColor: '#3f51b5',
-              color: 'white',
-              padding: '20px',
-              textAlign: 'center'
-            }}
-          >
-            <Typography variant="h5" sx={{ fontWeight: 600 }}>
-              <QrCodeScannerIcon sx={{ verticalAlign: 'middle', mr: 1 }} />
-              Student Attendance Scanner
-            </Typography>
-          </Box>
-
-          <CardContent sx={{ padding: '32px' }}>
-            <Box sx={{ 
-              display: 'grid', 
-              gridTemplateColumns: { md: '1fr 1fr' },
-              gap: 3,
-              mb: 4
-            }}>
-              <FormControl fullWidth sx={{ mb: 2 }}>
-                <InputLabel id="subject-select-label">
-                  <SubjectIcon sx={{ verticalAlign: 'middle', mr: 1, fontSize: '20px' }} />
-                  Select Subject
-                </InputLabel>
-                <Select
-                  labelId="subject-select-label"
-                  id="subject-select"
-                  value={subjectName}
-                  label="Select Subject"
-                  onChange={handleSubjectChange}
-                  required
-                  sx={{
-                    '& .MuiSelect-select': {
-                      display: 'flex',
-                      alignItems: 'center'
-                    }
-                  }}
-                >
-                  {subjectsList.length > 0 ? (
-                    subjectsList.map((subject, index) => (
-                      <MenuItem key={index} value={subject.subName}>
-                        {subject.subName}
-                      </MenuItem>
-                    ))
-                  ) : (
-                    <MenuItem value="" disabled>
-                      No Subjects Available
-                    </MenuItem>
-                  )}
-                </Select>
-              </FormControl>
-
-              <FormControl fullWidth sx={{ mb: 2 }}>
-                <TextField
-                  label={
-                    <>
-                      <CalendarTodayIcon sx={{ verticalAlign: 'middle', mr: 1, fontSize: '20px' }} />
-                      Select Date
-                    </>
-                  }
-                  type="date"
-                  value={date}
-                  onChange={(event) => setDate(event.target.value)}
-                  required
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </FormControl>
-            </Box>
-
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-              border="2px dashed #e0e0e0"
-              borderRadius="12px"
-              p={4}
-              mb={4}
-              sx={{
-                backgroundColor: '#f9f9f9',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  borderColor: '#3f51b5',
-                  backgroundColor: '#f0f4ff'
-                }
-              }}
-            >
-              {loading ? (
-                <Box textAlign="center">
-                  <CircularProgress color="primary" size={60} />
-                  <Typography variant="body1" color="textSecondary" mt={2}>
-                    Scanning for QR code...
-                  </Typography>
-                </Box>
-              ) : (
-                <>
-                  <QrCodeScannerIcon sx={{ fontSize: 60, color: '#3f51b5', mb: 2 }} />
-                  <Typography variant="h6" gutterBottom sx={{ fontWeight: 500 }}>
-                    Scan Student QR Code
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" sx={{ mb: 3, textAlign: 'center' }}>
-                    Position the QR code within the frame to scan. Make sure the code is clear and well-lit.
-                  </Typography>
-                  
-                  <Box sx={{ 
-                    width: '100%', 
-                    maxWidth: '400px',
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    border: '4px solid #3f51b5'
-                  }}>
-                    <QrReader
-                      onResult={(result, error) => {
-                        if (!!result) {
-                          handleScan(result?.text);
-                        }
-                        if (!!error) {
-                          handleError(error);
-                        }
-                      }}
-                      constraints={{ facingMode: 'environment' }}
-                      videoStyle={{
-                        width: '100%',
-                        height: 'auto',
-                      }}
-                    />
-                  </Box>
-                </>
-              )}
-            </Box>
-
-            {scanResult && (
-              <Box 
-                sx={{
-                  backgroundColor: '#e8f5e9',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  mb: 3,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <CheckCircleIcon sx={{ color: '#4caf50', fontSize: '30px', mr: 2 }} />
-                  <Box>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                      Student ID Detected
-                    </Typography>
-                    <Typography variant="body1" sx={{ color: '#2e7d32' }}>
-                      {scanResult}
-                    </Typography>
-                  </Box>
-                </Box>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleAddAttendance}
-                  sx={{
-                    borderRadius: '12px',
-                    padding: '8px 20px',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    boxShadow: 'none',
-                    '&:hover': {
-                      boxShadow: '0 2px 10px rgba(63, 81, 181, 0.3)'
-                    }
-                  }}
-                >
-                  Confirm Attendance
-                </Button>
-              </Box>
-            )}
-
-            {errorMessage && (
-              <Box 
-                sx={{
-                  backgroundColor: '#ffebee',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  textAlign: 'center'
-                }}
-              >
-                <Typography variant="body1" color="error">
-                  {errorMessage}
-                </Typography>
-              </Box>
-            )}
-          </CardContent>
-        </Paper>
-
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={3000}
-          onClose={handleSnackbarClose}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        >
-          <Alert 
-            onClose={handleSnackbarClose} 
-            severity="success"
-            sx={{ width: '100%' }}
-          >
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
-      </Box>
-    </Box>
-  );
-};
-
-export default AdminAttendance;
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import {
 //   Box,
+//   Button,
 //   Card,
 //   CardContent,
 //   CircularProgress,
@@ -1109,69 +688,84 @@ export default AdminAttendance;
 //   Drawer,
 //   List,
 //   ListItem,
+//   ListItemIcon,
 //   ListItemText,
 //   Snackbar,
 //   Alert,
-//   Button,
+//   Paper,
 //   Divider,
-//   Badge
+//   Avatar
 // } from '@mui/material';
 // import React, { useEffect, useState } from 'react';
 // import { QrReader } from 'react-qr-reader';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { getSubjectList } from '../../../redux/sclassRelated/sclassHandle';
+// import { updateStudentFields } from '../../../redux/studentRelated/studentHandle';
 // import MenuIcon from '@mui/icons-material/Menu';
+// import DashboardIcon from '@mui/icons-material/Dashboard';
+// import AssignmentIcon from '@mui/icons-material/Assignment';
+// import ReportIcon from '@mui/icons-material/Assessment';
+// import SettingsIcon from '@mui/icons-material/Settings';
 // import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
-// import EventIcon from '@mui/icons-material/Event';
-// import ClassIcon from '@mui/icons-material/Class';
-// import CheckIcon from '@mui/icons-material/Check';
+// import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+// import SubjectIcon from '@mui/icons-material/Subject';
+// import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 // const AdminAttendance = () => {
 //   const dispatch = useDispatch();
 //   const { subjectsList } = useSelector((state) => state.sclass);
 //   const [scanResult, setScanResult] = useState(null);
 //   const [loading, setLoading] = useState(false);
+//   const [errorMessage, setErrorMessage] = useState('');
 //   const [subjectName, setSubjectName] = useState('');
-//   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+//   const [chosenSubName, setChosenSubName] = useState('');
+//   const [date, setDate] = useState('');
 //   const [drawerOpen, setDrawerOpen] = useState(false);
 //   const [snackbarOpen, setSnackbarOpen] = useState(false);
 //   const [snackbarMessage, setSnackbarMessage] = useState('');
-//   const [scanHistory, setScanHistory] = useState([]);
-//   const [cameraActive, setCameraActive] = useState(true);
-
+  
 //   useEffect(() => {
 //     dispatch(getSubjectList("classOrRelevantIdentifier", "ClassSubjects"));
 //   }, [dispatch]);
 
 //   const handleScan = (data) => {
 //     if (data) {
-//       setLoading(true);
 //       setScanResult(data);
-//       setScanHistory(prev => [...prev, {
-//         id: data,
-//         time: new Date().toLocaleTimeString(),
-//         date: new Date().toLocaleDateString()
-//       }]);
-      
-//       setSnackbarMessage(`QR Code Scanned: ${data}`);
+//       setSnackbarMessage("QR Code scanned successfully!");
 //       setSnackbarOpen(true);
+//       setErrorMessage('');
 //       setLoading(false);
-      
-//       // Temporarily disable camera to prevent multiple scans
-//       setCameraActive(false);
-//       setTimeout(() => setCameraActive(true), 2000);
 //     }
 //   };
 
 //   const handleError = (err) => {
-//     console.error(err);
-//     setSnackbarMessage('Scanner error. Please try again.');
-//     setSnackbarOpen(true);
 //     setLoading(false);
+//     console.error(err);
+//   };
+
+//   const handleAddAttendance = () => {
+//     if (scanResult && chosenSubName && date) {
+//       const fields = {
+//         status: 'Present',
+//         date,
+//         subName: chosenSubName,
+//       };
+//       dispatch(updateStudentFields(scanResult, fields, 'StudentAttendance'));
+//       setErrorMessage('');
+//       setScanResult(null);
+//       setSnackbarMessage("Attendance recorded successfully!");
+//       setSnackbarOpen(true);
+//     } else {
+//       setErrorMessage('Please complete all fields and scan a QR code');
+//     }
 //   };
 
 //   const handleSubjectChange = (event) => {
-//     setSubjectName(event.target.value);
+//     const selectedSubject = subjectsList.find(
+//       (subject) => subject.subName === event.target.value
+//     );
+//     setSubjectName(selectedSubject.subName);
+//     setChosenSubName(selectedSubject._id);
 //   };
 
 //   const toggleDrawer = () => {
@@ -1182,229 +776,298 @@ export default AdminAttendance;
 //     setSnackbarOpen(false);
 //   };
 
-//   const handleAddAttendance = () => {
-//     if (scanResult && subjectName && date) {
-//       setSnackbarMessage(`Attendance would be recorded for ${scanResult}`);
-//       setSnackbarOpen(true);
-//       // Here you would dispatch your attendance action
-//       // dispatch(updateStudentFields(scanResult, fields, 'StudentAttendance'));
-//     } else {
-//       setSnackbarMessage('Please select subject, date, and scan a QR code first');
-//       setSnackbarOpen(true);
-//     }
-//   };
+//   const menuItems = [
+//     { text: 'Dashboard', icon: <DashboardIcon /> },
+//     { text: 'Attendance', icon: <AssignmentIcon /> },
+//     { text: 'Reports', icon: <ReportIcon /> },
+//     { text: 'Settings', icon: <SettingsIcon /> }
+//   ];
 
 //   return (
-//     <Box display="flex" minHeight="100vh" bgcolor="#f8fafc">
-//       <AppBar position="fixed" color="primary" elevation={0}>
+//     <Box display="flex" minHeight="100vh" bgcolor="#f5f7fa">
+//       <AppBar 
+//         position="fixed" 
+//         sx={{ 
+//           zIndex: (theme) => theme.zIndex.drawer + 1,
+//           backgroundColor: 'white',
+//           color: '#3f51b5',
+//           boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+//         }}
+//       >
 //         <Toolbar>
-//           <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
+//           <IconButton
+//             edge="start"
+//             color="inherit"
+//             aria-label="menu"
+//             onClick={toggleDrawer}
+//             sx={{ mr: 2 }}
+//           >
 //             <MenuIcon />
 //           </IconButton>
-//           <Typography variant="h6" sx={{ flexGrow: 1 }}>Attendance Portal</Typography>
+//           <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 600 }}>
+//             Attendance Portal
+//           </Typography>
+//           <Avatar sx={{ bgcolor: '#3f51b5' }}>A</Avatar>
 //         </Toolbar>
 //       </AppBar>
 
-//       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer}>
-//         <Box sx={{ width: 250 }} role="presentation">
+//       <Drawer 
+//         variant="temporary"
+//         open={drawerOpen}
+//         onClose={toggleDrawer}
+//         sx={{
+//           '& .MuiDrawer-paper': {
+//             width: 240,
+//             boxSizing: 'border-box',
+//             backgroundColor: '#3f51b5',
+//             color: 'white'
+//           },
+//         }}
+//       >
+//         <Toolbar />
+//         <Box sx={{ overflow: 'auto' }}>
 //           <List>
-//             {['Dashboard', 'Attendance', 'Reports', 'Settings'].map((text) => (
-//               <ListItem button key={text}>
-//                 <ListItemText primary={text} />
+//             {menuItems.map((item) => (
+//               <ListItem button key={item.text} sx={{
+//                 '&:hover': {
+//                   backgroundColor: 'rgba(255,255,255,0.1)'
+//                 }
+//               }}>
+//                 <ListItemIcon sx={{ color: 'white' }}>
+//                   {item.icon}
+//                 </ListItemIcon>
+//                 <ListItemText primary={item.text} />
 //               </ListItem>
 //             ))}
 //           </List>
 //         </Box>
 //       </Drawer>
 
-//       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: '64px' }}>
-//         <Box sx={{ maxWidth: 900, mx: 'auto', display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
-//           {/* Scanner Card */}
-//           <Card sx={{ 
-//             flex: 1,
-//             borderRadius: 2,
-//             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-//             overflow: 'hidden'
-//           }}>
-//             <CardContent sx={{ p: 3 }}>
-//               <Box sx={{ 
-//                 display: 'flex', 
-//                 alignItems: 'center', 
-//                 gap: 1.5,
-//                 mb: 3 
-//               }}>
-//                 <QrCodeScannerIcon color="primary" fontSize="large" />
-//                 <Typography variant="h6" fontWeight="medium">QR Code Scanner</Typography>
-//               </Box>
+//       <Box
+//         component="main"
+//         sx={{
+//           flexGrow: 1,
+//           p: 3,
+//           marginTop: '64px',
+//           display: 'flex',
+//           justifyContent: 'center',
+//           alignItems: 'center'
+//         }}
+//       >
+//         <Paper 
+//           elevation={3} 
+//           sx={{
+//             width: '100%',
+//             maxWidth: '800px',
+//             borderRadius: '16px',
+//             overflow: 'hidden',
+//             boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+//           }}
+//         >
+//           <Box 
+//             sx={{
+//               backgroundColor: '#3f51b5',
+//               color: 'white',
+//               padding: '20px',
+//               textAlign: 'center'
+//             }}
+//           >
+//             <Typography variant="h5" sx={{ fontWeight: 600 }}>
+//               <QrCodeScannerIcon sx={{ verticalAlign: 'middle', mr: 1 }} />
+//               Student Attendance Scanner
+//             </Typography>
+//           </Box>
 
-//               <Box sx={{ 
-//                 position: 'relative',
-//                 borderRadius: 2,
-//                 overflow: 'hidden',
-//                 border: '1px dashed',
-//                 borderColor: 'divider',
-//                 mb: 3,
-//                 aspectRatio: '1/1'
-//               }}>
-//                 {cameraActive ? (
-//                   <QrReader
-//                     onResult={(result, error) => {
-//                       if (!!result) handleScan(result?.text);
-//                       if (!!error) handleError(error);
-//                     }}
-//                     constraints={{ facingMode: 'environment' }}
-//                     videoStyle={{ width: '100%', height: '100%' }}
-//                   />
-//                 ) : (
-//                   <Box sx={{
-//                     width: '100%',
-//                     height: '100%',
-//                     display: 'flex',
-//                     alignItems: 'center',
-//                     justifyContent: 'center',
-//                     bgcolor: 'background.paper'
-//                   }}>
-//                     <Typography color="text.secondary">Scanner paused</Typography>
-//                   </Box>
-//                 )}
-
-//                 {loading && (
-//                   <Box sx={{
-//                     position: 'absolute',
-//                     top: 0,
-//                     left: 0,
-//                     right: 0,
-//                     bottom: 0,
-//                     display: 'flex',
-//                     alignItems: 'center',
-//                     justifyContent: 'center',
-//                     bgcolor: 'rgba(255,255,255,0.7)'
-//                   }}>
-//                     <CircularProgress size={60} />
-//                   </Box>
-//                 )}
-//               </Box>
-
-//               <Box sx={{ mb: 3 }}>
-//                 <FormControl fullWidth sx={{ mb: 2 }}>
-//                   <InputLabel id="subject-label">
-//                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-//                       <ClassIcon fontSize="small" /> Subject
-//                     </Box>
-//                   </InputLabel>
-//                   <Select
-//                     labelId="subject-label"
-//                     value={subjectName}
-//                     label="Subject"
-//                     onChange={handleSubjectChange}
-//                     required
-//                   >
-//                     {subjectsList.map((subject, index) => (
+//           <CardContent sx={{ padding: '32px' }}>
+//             <Box sx={{ 
+//               display: 'grid', 
+//               gridTemplateColumns: { md: '1fr 1fr' },
+//               gap: 3,
+//               mb: 4
+//             }}>
+//               <FormControl fullWidth sx={{ mb: 2 }}>
+//                 <InputLabel id="subject-select-label">
+//                   <SubjectIcon sx={{ verticalAlign: 'middle', mr: 1, fontSize: '20px' }} />
+//                   Select Subject
+//                 </InputLabel>
+//                 <Select
+//                   labelId="subject-select-label"
+//                   id="subject-select"
+//                   value={subjectName}
+//                   label="Select Subject"
+//                   onChange={handleSubjectChange}
+//                   required
+//                   sx={{
+//                     '& .MuiSelect-select': {
+//                       display: 'flex',
+//                       alignItems: 'center'
+//                     }
+//                   }}
+//                 >
+//                   {subjectsList.length > 0 ? (
+//                     subjectsList.map((subject, index) => (
 //                       <MenuItem key={index} value={subject.subName}>
 //                         {subject.subName}
 //                       </MenuItem>
-//                     ))}
-//                   </Select>
-//                 </FormControl>
+//                     ))
+//                   ) : (
+//                     <MenuItem value="" disabled>
+//                       No Subjects Available
+//                     </MenuItem>
+//                   )}
+//                 </Select>
+//               </FormControl>
 
-//                 <FormControl fullWidth>
-//                   <TextField
-//                     label={
-//                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-//                         <EventIcon fontSize="small" /> Date
-//                       </Box>
-//                     }
-//                     type="date"
-//                     value={date}
-//                     onChange={(e) => setDate(e.target.value)}
-//                     required
-//                     InputLabelProps={{ shrink: true }}
-//                   />
-//                 </FormControl>
-//               </Box>
+//               <FormControl fullWidth sx={{ mb: 2 }}>
+//                 <TextField
+//                   label={
+//                     <>
+//                       <CalendarTodayIcon sx={{ verticalAlign: 'middle', mr: 1, fontSize: '20px' }} />
+//                       Select Date
+//                     </>
+//                   }
+//                   type="date"
+//                   value={date}
+//                   onChange={(event) => setDate(event.target.value)}
+//                   required
+//                   InputLabelProps={{
+//                     shrink: true,
+//                   }}
+//                 />
+//               </FormControl>
+//             </Box>
 
-//               {scanResult && (
+//             <Box
+//               display="flex"
+//               flexDirection="column"
+//               alignItems="center"
+//               justifyContent="center"
+//               border="2px dashed #e0e0e0"
+//               borderRadius="12px"
+//               p={4}
+//               mb={4}
+//               sx={{
+//                 backgroundColor: '#f9f9f9',
+//                 transition: 'all 0.3s ease',
+//                 '&:hover': {
+//                   borderColor: '#3f51b5',
+//                   backgroundColor: '#f0f4ff'
+//                 }
+//               }}
+//             >
+//               {loading ? (
+//                 <Box textAlign="center">
+//                   <CircularProgress color="primary" size={60} />
+//                   <Typography variant="body1" color="textSecondary" mt={2}>
+//                     Scanning for QR code...
+//                   </Typography>
+//                 </Box>
+//               ) : (
+//                 <>
+//                   <QrCodeScannerIcon sx={{ fontSize: 60, color: '#3f51b5', mb: 2 }} />
+//                   <Typography variant="h6" gutterBottom sx={{ fontWeight: 500 }}>
+//                     Scan Student QR Code
+//                   </Typography>
+//                   <Typography variant="body2" color="textSecondary" sx={{ mb: 3, textAlign: 'center' }}>
+//                     Position the QR code within the frame to scan. Make sure the code is clear and well-lit.
+//                   </Typography>
+                  
+//                   <Box sx={{ 
+//                     width: '100%', 
+//                     maxWidth: '400px',
+//                     borderRadius: '12px',
+//                     overflow: 'hidden',
+//                     border: '4px solid #3f51b5'
+//                   }}>
+//                     <QrReader
+//                       onResult={(result, error) => {
+//                         if (!!result) {
+//                           handleScan(result?.text);
+//                         }
+//                         if (!!error) {
+//                           handleError(error);
+//                         }
+//                       }}
+//                       constraints={{ facingMode: 'environment' }}
+//                       videoStyle={{
+//                         width: '100%',
+//                         height: 'auto',
+//                       }}
+//                     />
+//                   </Box>
+//                 </>
+//               )}
+//             </Box>
+
+//             {scanResult && (
+//               <Box 
+//                 sx={{
+//                   backgroundColor: '#e8f5e9',
+//                   borderRadius: '12px',
+//                   padding: '16px',
+//                   mb: 3,
+//                   display: 'flex',
+//                   alignItems: 'center',
+//                   justifyContent: 'space-between'
+//                 }}
+//               >
+//                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
+//                   <CheckCircleIcon sx={{ color: '#4caf50', fontSize: '30px', mr: 2 }} />
+//                   <Box>
+//                     <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+//                       Student ID Detected
+//                     </Typography>
+//                     <Typography variant="body1" sx={{ color: '#2e7d32' }}>
+//                       {scanResult}
+//                     </Typography>
+//                   </Box>
+//                 </Box>
 //                 <Button
-//                   fullWidth
 //                   variant="contained"
-//                   size="large"
-//                   startIcon={<CheckIcon />}
+//                   color="primary"
 //                   onClick={handleAddAttendance}
-//                   disabled={!subjectName || !date}
-//                   sx={{ py: 1.5 }}
+//                   sx={{
+//                     borderRadius: '12px',
+//                     padding: '8px 20px',
+//                     textTransform: 'none',
+//                     fontWeight: 600,
+//                     boxShadow: 'none',
+//                     '&:hover': {
+//                       boxShadow: '0 2px 10px rgba(63, 81, 181, 0.3)'
+//                     }
+//                   }}
 //                 >
 //                   Confirm Attendance
 //                 </Button>
-//               )}
-//             </CardContent>
-//           </Card>
+//               </Box>
+//             )}
 
-//           {/* Scan History Card */}
-//           <Card sx={{ 
-//             flex: 1,
-//             borderRadius: 2,
-//             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-//             display: scanHistory.length > 0 ? 'block' : { xs: 'none', md: 'block' }
-//           }}>
-//             <CardContent sx={{ p: 3, height: '100%' }}>
-//               <Typography variant="h6" fontWeight="medium" sx={{ mb: 2 }}>
-//                 Scan History
-//               </Typography>
-              
-//               {scanHistory.length > 0 ? (
-//                 <Box sx={{ 
-//                   height: 'calc(100% - 40px)',
-//                   overflowY: 'auto',
-//                   pr: 1
-//                 }}>
-//                   {scanHistory.slice().reverse().map((scan, index) => (
-//                     <React.Fragment key={index}>
-//                       <Box sx={{ 
-//                         display: 'flex', 
-//                         alignItems: 'center',
-//                         justifyContent: 'space-between',
-//                         py: 1.5
-//                       }}>
-//                         <Box>
-//                           <Typography fontWeight="medium">Student ID: {scan.id}</Typography>
-//                           <Typography variant="body2" color="text.secondary">
-//                             {scan.date} at {scan.time}
-//                           </Typography>
-//                         </Box>
-//                         <Badge badgeContent={index === 0 ? "New" : 0} color="primary">
-//                           <CheckIcon color="success" />
-//                         </Badge>
-//                       </Box>
-//                       {index < scanHistory.length - 1 && <Divider />}
-//                     </React.Fragment>
-//                   ))}
-//                 </Box>
-//               ) : (
-//                 <Box sx={{ 
-//                   height: '100%',
-//                   display: 'flex',
-//                   alignItems: 'center',
-//                   justifyContent: 'center',
+//             {errorMessage && (
+//               <Box 
+//                 sx={{
+//                   backgroundColor: '#ffebee',
+//                   borderRadius: '12px',
+//                   padding: '16px',
 //                   textAlign: 'center'
-//                 }}>
-//                   <Typography color="text.secondary">
-//                     No scan history yet. <br /> Scan QR codes to see them appear here.
-//                   </Typography>
-//                 </Box>
-//               )}
-//             </CardContent>
-//           </Card>
-//         </Box>
+//                 }}
+//               >
+//                 <Typography variant="body1" color="error">
+//                   {errorMessage}
+//                 </Typography>
+//               </Box>
+//             )}
+//           </CardContent>
+//         </Paper>
 
 //         <Snackbar
 //           open={snackbarOpen}
-//           autoHideDuration={4000}
+//           autoHideDuration={3000}
 //           onClose={handleSnackbarClose}
-//           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+//           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
 //         >
 //           <Alert 
 //             onClose={handleSnackbarClose} 
-//             severity={scanResult ? "success" : "error"}
+//             severity="success"
 //             sx={{ width: '100%' }}
 //           >
 //             {snackbarMessage}
@@ -1416,3 +1079,340 @@ export default AdminAttendance;
 // };
 
 // export default AdminAttendance;
+
+
+
+
+
+
+
+
+
+
+
+
+
+import {
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Snackbar,
+  Alert,
+  Button,
+  Divider,
+  Badge
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { QrReader } from 'react-qr-reader';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSubjectList } from '../../../redux/sclassRelated/sclassHandle';
+import MenuIcon from '@mui/icons-material/Menu';
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import EventIcon from '@mui/icons-material/Event';
+import ClassIcon from '@mui/icons-material/Class';
+import CheckIcon from '@mui/icons-material/Check';
+
+const AdminAttendance = () => {
+  const dispatch = useDispatch();
+  const { subjectsList } = useSelector((state) => state.sclass);
+  const [scanResult, setScanResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [subjectName, setSubjectName] = useState('');
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [scanHistory, setScanHistory] = useState([]);
+  const [cameraActive, setCameraActive] = useState(true);
+
+  useEffect(() => {
+    dispatch(getSubjectList("classOrRelevantIdentifier", "ClassSubjects"));
+  }, [dispatch]);
+
+  const handleScan = (data) => {
+    if (data) {
+      setLoading(true);
+      setScanResult(data);
+      setScanHistory(prev => [...prev, {
+        id: data,
+        time: new Date().toLocaleTimeString(),
+        date: new Date().toLocaleDateString()
+      }]);
+      
+      setSnackbarMessage(`QR Code Scanned: ${data}`);
+      setSnackbarOpen(true);
+      setLoading(false);
+      
+      // Temporarily disable camera to prevent multiple scans
+      setCameraActive(false);
+      setTimeout(() => setCameraActive(true), 2000);
+    }
+  };
+
+  const handleError = (err) => {
+    console.error(err);
+    setSnackbarMessage('Scanner error. Please try again.');
+    setSnackbarOpen(true);
+    setLoading(false);
+  };
+
+  const handleSubjectChange = (event) => {
+    setSubjectName(event.target.value);
+  };
+
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const handleAddAttendance = () => {
+    if (scanResult && subjectName && date) {
+      setSnackbarMessage(`Attendance would be recorded for ${scanResult}`);
+      setSnackbarOpen(true);
+      // Here you would dispatch your attendance action
+      // dispatch(updateStudentFields(scanResult, fields, 'StudentAttendance'));
+    } else {
+      setSnackbarMessage('Please select subject, date, and scan a QR code first');
+      setSnackbarOpen(true);
+    }
+  };
+
+  return (
+    <Box display="flex" minHeight="100vh" bgcolor="#f8fafc">
+      <AppBar position="fixed" color="primary" elevation={0}>
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>Attendance Portal</Typography>
+        </Toolbar>
+      </AppBar>
+
+      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer}>
+        <Box sx={{ width: 250 }} role="presentation">
+          <List>
+            {['Dashboard', 'Attendance', 'Reports', 'Settings'].map((text) => (
+              <ListItem button key={text}>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+
+      <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: '64px' }}>
+        <Box sx={{ maxWidth: 900, mx: 'auto', display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
+          {/* Scanner Card */}
+          <Card sx={{ 
+            flex: 1,
+            borderRadius: 2,
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            overflow: 'hidden'
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 1.5,
+                mb: 3 
+              }}>
+                <QrCodeScannerIcon color="primary" fontSize="large" />
+                <Typography variant="h6" fontWeight="medium">QR Code Scanner</Typography>
+              </Box>
+
+              <Box sx={{ 
+                position: 'relative',
+                borderRadius: 2,
+                overflow: 'hidden',
+                border: '1px dashed',
+                borderColor: 'divider',
+                mb: 3,
+                aspectRatio: '1/1'
+              }}>
+                {cameraActive ? (
+                  <QrReader
+                    onResult={(result, error) => {
+                      if (!!result) handleScan(result?.text);
+                      if (!!error) handleError(error);
+                    }}
+                    constraints={{ facingMode: 'environment' }}
+                    videoStyle={{ width: '100%', height: '100%' }}
+                  />
+                ) : (
+                  <Box sx={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    bgcolor: 'background.paper'
+                  }}>
+                    <Typography color="text.secondary">Scanner paused</Typography>
+                  </Box>
+                )}
+
+                {loading && (
+                  <Box sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    bgcolor: 'rgba(255,255,255,0.7)'
+                  }}>
+                    <CircularProgress size={60} />
+                  </Box>
+                )}
+              </Box>
+
+              <Box sx={{ mb: 3 }}>
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                  <InputLabel id="subject-label">
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <ClassIcon fontSize="small" /> Subject
+                    </Box>
+                  </InputLabel>
+                  <Select
+                    labelId="subject-label"
+                    value={subjectName}
+                    label="Subject"
+                    onChange={handleSubjectChange}
+                    required
+                  >
+                    {subjectsList.map((subject, index) => (
+                      <MenuItem key={index} value={subject.subName}>
+                        {subject.subName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth>
+                  <TextField
+                    label={
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <EventIcon fontSize="small" /> Date
+                      </Box>
+                    }
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    required
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </FormControl>
+              </Box>
+
+              {scanResult && (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  startIcon={<CheckIcon />}
+                  onClick={handleAddAttendance}
+                  disabled={!subjectName || !date}
+                  sx={{ py: 1.5 }}
+                >
+                  Confirm Attendance
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Scan History Card */}
+          <Card sx={{ 
+            flex: 1,
+            borderRadius: 2,
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            display: scanHistory.length > 0 ? 'block' : { xs: 'none', md: 'block' }
+          }}>
+            <CardContent sx={{ p: 3, height: '100%' }}>
+              <Typography variant="h6" fontWeight="medium" sx={{ mb: 2 }}>
+                Scan History
+              </Typography>
+              
+              {scanHistory.length > 0 ? (
+                <Box sx={{ 
+                  height: 'calc(100% - 40px)',
+                  overflowY: 'auto',
+                  pr: 1
+                }}>
+                  {scanHistory.slice().reverse().map((scan, index) => (
+                    <React.Fragment key={index}>
+                      <Box sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        py: 1.5
+                      }}>
+                        <Box>
+                          <Typography fontWeight="medium">Student ID: {scan.id}</Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {scan.date} at {scan.time}
+                          </Typography>
+                        </Box>
+                        <Badge badgeContent={index === 0 ? "New" : 0} color="primary">
+                          <CheckIcon color="success" />
+                        </Badge>
+                      </Box>
+                      {index < scanHistory.length - 1 && <Divider />}
+                    </React.Fragment>
+                  ))}
+                </Box>
+              ) : (
+                <Box sx={{ 
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
+                }}>
+                  <Typography color="text.secondary">
+                    No scan history yet. <br /> Scan QR codes to see them appear here.
+                  </Typography>
+                </Box>
+              )}
+            </CardContent>
+          </Card>
+        </Box>
+
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={4000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <Alert 
+            onClose={handleSnackbarClose} 
+            severity={scanResult ? "success" : "error"}
+            sx={{ width: '100%' }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </Box>
+    </Box>
+  );
+};
+
+export default AdminAttendance;
