@@ -233,7 +233,7 @@ const AdminHomePage = () => {
                         <StyledPaper>
                             <StyledImage src={Fees} alt="Fees" />
                             <Title>Fees Collection</Title>
-                            <Data start={0} end={230000} duration={2.5} prefix="Rs." />
+                            <Data start={0} end={0} duration={2.5} prefix="Rs." />
                         </StyledPaper>
                     </Grid>
                     <Grid item xs={12}>
