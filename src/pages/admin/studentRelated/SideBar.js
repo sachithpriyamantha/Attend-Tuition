@@ -29,7 +29,7 @@ const SideBar = () => {
                     <ListItemIcon>
                         <QrCodeScannerIcon color={location.pathname.startsWith ( "/Admin/students/student/attendance/:id") ? 'primary' : 'inherit'} />
                     </ListItemIcon>
-                    <ListItemText primary="StudentAttendance" />
+                    <ListItemText primary="Student Attendance" />
                 </ListItemButton>
 
                 <ListItemButton component={Link} to="/Admin/classes">
