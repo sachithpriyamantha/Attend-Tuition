@@ -54,7 +54,7 @@ const AddStudent = ({ situation }) => {
     const [guardianPhone, setguardianPhone] = useState('');
     const [dob, setDob] = useState('');
 
-    const [errors, setErrors] = useState({}); 
+    const [errors, setErrors] = useState({});
     const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage] = useState('');
     const [loader, setLoader] = useState(false);
@@ -101,10 +101,10 @@ const AddStudent = ({ situation }) => {
         }
 
         setIsGeneratingRollNum(true);
-        
+
         // Find all students in the selected class
         const classStudents = studentsList?.filter(student => student.sclassName === sclassName) || [];
-        
+
         // Extract existing roll numbers and convert to integers
         const existingRollNumbers = classStudents
             .map(student => {
@@ -113,14 +113,14 @@ const AddStudent = ({ situation }) => {
                 return rollNum ? parseInt(rollNum, 10) : 0;
             })
             .filter(num => !isNaN(num) && num > 0); // Filter out invalid numbers
-        
+
         // Find the next available roll number
         let nextRollNum = 1;
-        
+
         if (existingRollNumbers.length > 0) {
             // Sort the existing roll numbers to find gaps or get the maximum
             existingRollNumbers.sort((a, b) => a - b);
-            
+
             // Check for gaps in the sequence starting from 1
             for (let i = 1; i <= existingRollNumbers.length + 1; i++) {
                 if (!existingRollNumbers.includes(i)) {
@@ -128,21 +128,21 @@ const AddStudent = ({ situation }) => {
                     break;
                 }
             }
-            
+
             // If no gaps found, use the next number after the maximum
             if (nextRollNum === 1 && existingRollNumbers.length > 0) {
                 nextRollNum = Math.max(...existingRollNumbers) + 1;
             }
         }
-        
+
         // Format the roll number with leading zeros (3 digits: 001, 002, etc.)
         const formattedRollNum = nextRollNum.toString().padStart(3, '0');
-        
+
         // Double-check uniqueness before setting
-        const isUnique = !classStudents.some(student => 
+        const isUnique = !classStudents.some(student =>
             student.rollNum?.toString().replace(/\D/g, '').padStart(3, '0') === formattedRollNum
         );
-        
+
         if (isUnique) {
             setRollNum(formattedRollNum);
         } else {
@@ -150,29 +150,29 @@ const AddStudent = ({ situation }) => {
             let fallbackNum = Math.max(...existingRollNumbers, 0) + 1;
             setRollNum(fallbackNum.toString().padStart(3, '0'));
         }
-        
+
         setIsGeneratingRollNum(false);
     };
 
     // Enhanced validation for roll number uniqueness
     const validateRollNumberUniqueness = (rollNumber) => {
         if (!rollNumber || !sclassName) return false;
-        
+
         const classStudents = studentsList?.filter(student => student.sclassName === sclassName) || [];
-        
+
         // Check if the roll number already exists in the class
         const isDuplicate = classStudents.some(student => {
             const existingRollNum = student.rollNum?.toString().toLowerCase().trim();
             const newRollNum = rollNumber.toString().toLowerCase().trim();
             return existingRollNum === newRollNum;
         });
-        
+
         return !isDuplicate;
     };
 
     const validateFields = () => {
         const newErrors = {};
-        
+
         if (!name.trim()) newErrors.name = 'Name is required';
         if (!rollNum.trim()) {
             newErrors.rollNum = 'Roll Number is required';
@@ -266,7 +266,7 @@ const AddStudent = ({ situation }) => {
     const handleRollNumChange = (e) => {
         const value = e.target.value;
         setRollNum(value);
-        
+
         // Clear roll number error when user starts typing
         if (errors.rollNum) {
             setErrors(prev => ({ ...prev, rollNum: '' }));
@@ -275,9 +275,9 @@ const AddStudent = ({ situation }) => {
 
     return (
         <Box sx={{ p: 3 }}>
-            <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
                 alignItems: 'center',
                 mb: 4,
                 flexWrap: 'wrap',
@@ -288,7 +288,7 @@ const AddStudent = ({ situation }) => {
                 </Typography>
             </Box>
 
-            <Paper elevation={0} sx={{ 
+            <Paper elevation={0} sx={{
                 borderRadius: 3,
                 overflow: 'hidden',
                 border: '1px solid',
@@ -329,12 +329,13 @@ const AddStudent = ({ situation }) => {
                                     <TextField
                                         fullWidth
                                         required
-                                        label="Roll Number"
+                                        label="ID Number"
                                         value={rollNum}
                                         onChange={handleRollNumChange}
                                         placeholder="Click generate or enter manually"
                                         error={!!errors.rollNum}
                                         helperText={errors.rollNum || "Format: 001, 002, 003..."}
+                                        autoComplete="off" // Disable autofill
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">
@@ -428,7 +429,7 @@ const AddStudent = ({ situation }) => {
                                         label="Phone Number"
                                         value={phoneNumber}
                                         onChange={handlePhoneNumberChange}
-                                        placeholder="(123) 456-7890"
+                                        placeholder="(+947) 456-7890"
                                         error={!!errors.phoneNumber}
                                         helperText={errors.phoneNumber}
                                         InputProps={{
@@ -461,9 +462,10 @@ const AddStudent = ({ situation }) => {
                                         label="Guardian's Phone"
                                         value={guardianPhone}
                                         onChange={handleguardianPhoneChanges}
-                                        placeholder="(123) 456-7890"
+                                        placeholder="(+947) 456-7890"
                                         error={!!errors.guardianPhone}
                                         helperText={errors.guardianPhone}
+                                        autoComplete="off" // Disable autofill
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">
@@ -513,10 +515,10 @@ const AddStudent = ({ situation }) => {
                 </Card>
             </Paper>
 
-            <Popup 
-                message={message} 
-                setShowPopup={setShowPopup} 
-                showPopup={showPopup} 
+            <Popup
+                message={message}
+                setShowPopup={setShowPopup}
+                showPopup={showPopup}
                 severity={message.includes("Failed") || message.includes("Error") ? "error" : "success"}
             />
         </Box>

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Students from "../assets/students.svg";
 import { LightPurpleButton } from '../components/buttonStyles';
+
 const Homepage = () => {
     return (
         <HeroContainer>
@@ -12,7 +13,7 @@ const Homepage = () => {
                 <source src={require('../assets/video1.mp4')} type="video/mp4" />
                 Your browser does not support the video tag.
             </BackgroundVideo>
-            <ContentWrapper>
+            <ContentWrapper> 
                 <Grid container spacing={2} alignItems="center" justifyContent="center">
                     <Grid item xs={12} md={6} container justifyContent="center">
                         <FloatingImage
@@ -47,7 +48,7 @@ const Homepage = () => {
                                     transition={{ delay: 1 }}
                                     style={{ fontFamily: "'Roboto', sans-serif", color: "#555", fontSize: "16px", lineHeight: "1.6" }}
                                 >
-                                    Streamline Class Management,<br />
+                                    Streamline Class Management,<br /> 
                                     class organization, and add students and faculty.<br />
                                     Seamlessly track attendance, assess performance, and provide feedback.
                                     Access records, view marks, and communicate effortlessly.
@@ -93,7 +94,9 @@ const Homepage = () => {
         </HeroContainer>
     );
 };
+
 export default Homepage;
+
 const FloatingImage = styled(motion.img)`
     width: 100%;
     max-width: 400px;
@@ -101,10 +104,12 @@ const FloatingImage = styled(motion.img)`
     animation: float 6s ease-in-out infinite;
     margin: 0 auto;
     text-align: center;
+
     @media (max-width: 600px) {
         max-width: 250px;
     }
 `;
+
 const AnimatedCard = styled(motion.div)`
     width: 90%;
     max-width: 500px;
@@ -116,21 +121,25 @@ const AnimatedCard = styled(motion.div)`
     transform: translateY(0);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
+
     &:hover {
         transform: translateY(-15px);
         box-shadow: 0px 12px 35px rgba(0, 0, 0, 0.4);
     }
+
     @media (max-width: 600px) {
         width: 95%;
         padding: 15px;
         margin: 0 auto;
     }
+
     & h1 {
         font-size: 2rem;
         @media (max-width: 600px) {
             font-size: 1.5rem;
         }
     }
+
     & p {
         font-size: 16px;
         @media (max-width: 600px) {
@@ -138,6 +147,7 @@ const AnimatedCard = styled(motion.div)`
         }
     }
 `;
+
 const StyledBox = styled(Box)`
     display: flex;
     flex-direction: column;
@@ -145,41 +155,48 @@ const StyledBox = styled(Box)`
     justify-content: center;
     gap: 20px;
     padding: 20px;
+
     @media (max-width: 600px) {
         gap: 15px;
         padding: 15px;
     }
 `;
+
 const GlowingButton = styled(LightPurpleButton)`
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
     padding: 12px 24px;
     font-size: 16px;
+
     &:hover {
-        background-color: #7F56DA;
+        background-color: #7f56da;
         color: #fff;
         box-shadow: 0px 0px 20px rgba(127, 86, 218, 0.8);
     }
+
     @media (max-width: 600px) {
         padding: 10px 20px;
         font-size: 14px;
     }
 `;
+
 const RippleButton = styled(Button)`
-    color: #7F56DA;
-    border-color: #7F56DA;
+    color: #7f56da;
+    border-color: #7f56da;
     position: relative;
     overflow: hidden;
     z-index: 1;
     transition: color 0.3s ease, border-color 0.3s ease;
     padding: 12px 24px;
     font-size: 16px;
+
     &:hover {
-        background-color: #7F56DA;
+        background-color: #7f56da;
         color: white;
-        border-color: #7F56DA;
+        border-color: #7f56da;
     }
+
     &:after {
         content: '';
         position: absolute;
@@ -194,20 +211,24 @@ const RippleButton = styled(Button)`
         border-radius: 50%;
         z-index: -1;
     }
+
     &:hover:after {
         width: 0;
         height: 0;
         opacity: 1;
     }
+
     @media (max-width: 600px) {
         padding: 10px 20px;
         font-size: 14px;
     }
 `;
+
 const StyledLink = styled(Link)`
     text-decoration: none;
     width: 100%;
 `;
+
 const HeroContainer = styled.div`
     position: relative;
     display: flex;
@@ -219,6 +240,7 @@ const HeroContainer = styled.div`
     padding: 0;
     overflow: hidden;
 `;
+
 const BackgroundVideo = styled.video`
     position: absolute;
     top: 0;
@@ -227,19 +249,26 @@ const BackgroundVideo = styled.video`
     height: 100%;
     object-fit: cover;
     z-index: -1;
+
     @media (max-width: 600px) {
         object-fit: cover;
     }
 `;
+
 const ContentWrapper = styled.div`
     position: relative;
     z-index: 1;
     width: 100%;
     padding: 20px;
+
     @media (max-width: 600px) {
         padding: 10px;
     }
 `;
+
+
+
+
 
 
 // import { Box, Button, Grid } from '@mui/material';

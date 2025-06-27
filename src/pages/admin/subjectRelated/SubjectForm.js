@@ -47,17 +47,14 @@ const generateSubjectCode = (subjectName) => {
     .replace(/[^a-zA-Z0-9 ]/g, "")
     .toUpperCase();
   
-  // Take first 3 letters of each word (if multiple words)
-  const words = cleanedName.split(" ");
-  const codeParts = words.map(word => word.slice(0, 3));
+  // Take first 3 letters of the subject name
+  const letters = cleanedName.replace(/\s/g, "").slice(0, 3).padEnd(3, 'X');
   
-  // Join with hyphen and limit total length
-  let generatedCode = codeParts.join("-");
-  if (generatedCode.length > 8) {
-    generatedCode = generatedCode.slice(0, 8);
-  }
+  // Generate a random 3-digit number
+  const randomNum = Math.floor(100 + Math.random() * 900);
   
-  return generatedCode;
+  // Combine letters and number
+  return `${letters}${randomNum}`;
 };
 
 const SubjectForm = () => {
@@ -65,6 +62,8 @@ const SubjectForm = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage] = useState("");
     const [loader, setLoader] = useState(false);
+    const [duplicateAlert, setDuplicateAlert] = useState(false);
+    const [duplicateSubject, setDuplicateSubject] = useState("");
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -81,16 +80,31 @@ const SubjectForm = () => {
         const newName = event.target.value;
         const updatedSubjects = [...subjects];
         
+        // Check for duplicate subject names (case-insensitive)
+        const isDuplicate = subjects.some(
+            (subject, idx) => 
+                idx !== index && 
+                subject.subName.trim().toLowerCase() === newName.trim().toLowerCase()
+        );
+
+        if (isDuplicate) {
+            setDuplicateSubject(newName);
+            setDuplicateAlert(true);
+            return;
+        }
+
         // Update subject name
         updatedSubjects[index].subName = newName;
         
-        // Auto-generate code only if the code field is empty or matches the previous auto-generated value
-        if (!updatedSubjects[index].subCode || 
-            updatedSubjects[index].subCode === generateSubjectCode(subjects[index].subName)) {
-            updatedSubjects[index].subCode = generateSubjectCode(newName);
-        }
+        // Auto-generate code in real-time
+        updatedSubjects[index].subCode = generateSubjectCode(newName);
         
         setSubjects(updatedSubjects);
+    };
+
+    const handleCloseDuplicateAlert = () => {
+        setDuplicateAlert(false);
+        setDuplicateSubject("");
     };
 
     const handleSubjectCodeChange = (index) => (event) => {
@@ -133,6 +147,19 @@ const SubjectForm = () => {
 
     const submitHandler = (event) => {
         event.preventDefault();
+        
+        // Check for duplicates before submitting
+        const subjectNames = subjects.map(subject => subject.subName.trim().toLowerCase());
+        const hasDuplicates = new Set(subjectNames).size !== subjectNames.length;
+        
+        if (hasDuplicates) {
+            setDuplicateSubject(subjects.find((subject, idx) => 
+                subjectNames.indexOf(subject.subName.trim().toLowerCase()) !== idx
+            )?.subName || "");
+            setDuplicateAlert(true);
+            return;
+        }
+
         setLoader(true);
         dispatch(addStuff(fields, address));
     };
@@ -195,7 +222,7 @@ const SubjectForm = () => {
                     <Grid container spacing={3}>
                         {subjects.map((subject, index) => (
                             <React.Fragment key={index}>
-                                <Grid item xs={12} sm={5}>
+                                <Grid item xs={12} sm={4}>
                                     <TextField
                                         fullWidth
                                         label="Subject Name"
@@ -210,7 +237,7 @@ const SubjectForm = () => {
                                         }}
                                     />
                                 </Grid>
-                                {/* <Grid item xs={12} sm={3}>
+                                <Grid item xs={12} sm={3}>
                                     <TextField
                                         fullWidth
                                         label="Subject Code"
@@ -239,8 +266,8 @@ const SubjectForm = () => {
                                             }
                                         }}
                                     />
-                                </Grid> */}
-                                <Grid item xs={12} sm={2}>
+                                </Grid>
+                                <Grid item xs={12} sm={3}>
                                     <TextField
                                         fullWidth
                                         label="Sessions"
@@ -322,6 +349,25 @@ const SubjectForm = () => {
                 showPopup={showPopup} 
                 severity={message.includes("Error") ? "error" : "success"}
             />
+
+            <Dialog
+                open={duplicateAlert}
+                onClose={handleCloseDuplicateAlert}
+                aria-labelledby="duplicate-alert-title"
+                aria-describedby="duplicate-alert-description"
+            >
+                <DialogTitle id="duplicate-alert-title">Duplicate Subject Name</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="duplicate-alert-description">
+                        The subject name "{duplicateSubject}" is already used. Please use a unique subject name.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDuplicateAlert} color="primary" autoFocus>
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 };

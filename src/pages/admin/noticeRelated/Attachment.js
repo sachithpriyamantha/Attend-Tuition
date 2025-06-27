@@ -356,7 +356,7 @@ const ShowNotices = () => {
                                 sx={{ mt: 3, borderRadius: '10px' }}
                                 onClick={() => setOpenDialog(true)}
                             >
-                                Add New Notice
+                                Add New Attachments
                             </Button>
                         </Box>
                     )}
