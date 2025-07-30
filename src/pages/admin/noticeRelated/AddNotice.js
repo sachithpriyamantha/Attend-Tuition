@@ -46,7 +46,7 @@ const AddNotice = () => {
       <Fade in={true} timeout={800}>
         <Paper elevation={8} sx={styles.paper}>
           <Typography variant="h4" sx={styles.header}>
-            Add New Notice
+            Add Attachment
           </Typography>
           <form onSubmit={submitHandler}>
             <Grid container spacing={3}>

@@ -17,13 +17,15 @@ import Logout from '../Logout'
 import AccountMenu from '../../components/AccountMenu';
 import { AppBar, Drawer } from '../../components/styles';
 import StudentAttendance from '../admin/studentRelated/StudentAttendance';
-
+//import StudentAttendance from '../admin/studentRelated/StudentAttendance';
 import TeacherClassDetails from './TeacherClassDetails';
-import TeacherComplain from './TeacherComplain';
+import ShowNotices from '../admin/noticeRelated/ShowNotices';
+import AddNotice from '../admin/noticeRelated/AddNotice';
 import TeacherHomePage from './TeacherHomePage';
 import TeacherProfile from './TeacherProfile';
 import TeacherViewStudent from './TeacherViewStudent';
 import StudentExamMarks from '../admin/studentRelated/StudentExamMarks';
+import Attachment from '../admin/noticeRelated/Attachment';
 
 const TeacherDashboard = () => {
     const [open, setOpen] = useState(true);
@@ -80,6 +82,9 @@ const TeacherDashboard = () => {
                         <Route path="/Teacher/dashboard" element={<TeacherHomePage />} />
                         <Route path="/Teacher/profile" element={<TeacherProfile />} />
                         <Route path="/Teacher/complain" element={<SeeComplains />} />
+                        <Route path="/Teacher/notices" element={<ShowNotices />} />
+                        <Route path="/Admin/addnotice" element={<AddNotice />} />
+                        <Route path="/Admin/attachment" element={<Attachment />} />
 
                         {/* <Route path="/Teacher/complain" element={<TeacherComplain />} /> */}
 

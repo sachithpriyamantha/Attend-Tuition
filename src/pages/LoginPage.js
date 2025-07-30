@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Grid, Box, Typography, Paper, Checkbox, FormControlLabel, TextField, CssBaseline, IconButton, InputAdornment, CircularProgress, Backdrop } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import bgpic from "../assets/Admin3.svg"
+import bgpic from "../assets/Admin3.jpg"
 import { LightPurpleButton } from '../components/buttonStyles';
 import styled from 'styled-components';
 import { loginUser } from '../redux/userRelated/userHandle';
@@ -13,15 +13,14 @@ import Popup from '../components/Popup';
 const defaultTheme = createTheme();
 
 const LoginPage = ({ role }) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+    const { status, currentUser, response, error, currentRole } = useSelector(state => state.user);
 
-    const { status, currentUser, response, error, currentRole } = useSelector(state => state.user);;
-
-    const [toggle, setToggle] = useState(false)
-    const [guestLoader, setGuestLoader] = useState(false)
-    const [loader, setLoader] = useState(false)
+    const [toggle, setToggle] = useState(false);
+    const [guestLoader, setGuestLoader] = useState(false);
+    const [loader, setLoader] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -38,18 +37,26 @@ const LoginPage = ({ role }) => {
             const studentName = event.target.studentName.value;
             const password = event.target.password.value;
 
+            // Validation checks
             if (!rollNum || !studentName || !password) {
                 if (!rollNum) setRollNumberError(true);
                 if (!studentName) setStudentNameError(true);
                 if (!password) setPasswordError(true);
                 return;
             }
-            const fields = { rollNum, studentName, password }
-            setLoader(true)
-            dispatch(loginUser(fields, role))
-        }
 
-        else {
+            // Validate rollNumber is a positive number
+            if (rollNum <= 0) {
+                setRollNumberError(true);
+                setMessage("ID Number must be a positive number");
+                setShowPopup(true);
+                return;
+            }
+
+            const fields = { rollNum, studentName, password };
+            setLoader(true);
+            dispatch(loginUser(fields, role));
+        } else {
             const email = event.target.email.value;
             const password = event.target.password.value;
 
@@ -59,9 +66,9 @@ const LoginPage = ({ role }) => {
                 return;
             }
 
-            const fields = { email, password }
-            setLoader(true)
-            dispatch(loginUser(fields, role))
+            const fields = { email, password };
+            setLoader(true);
+            dispatch(loginUser(fields, role));
         }
     };
 
@@ -73,51 +80,52 @@ const LoginPage = ({ role }) => {
         if (name === 'studentName') setStudentNameError(false);
     };
 
+    const preventMinus = (event) => {
+        if (event.key === '-') {
+            event.preventDefault();
+        }
+    };
+
     const guestModeHandler = () => {
-        const password = "zxc"
+        const password = "zxc";
 
         if (role === "Admin") {
-            const email = "yogendra@12"
-            const fields = { email, password }
-            setGuestLoader(true)
-            dispatch(loginUser(fields, role))
+            const email = "yogendra@12";
+            const fields = { email, password };
+            setGuestLoader(true);
+            dispatch(loginUser(fields, role));
+        } else if (role === "Student") {
+            const rollNum = "1";
+            const studentName = "Dipesh Awasthi";
+            const fields = { rollNum, studentName, password };
+            setGuestLoader(true);
+            dispatch(loginUser(fields, role));
+        } else if (role === "Teacher") {
+            const email = "tony@12";
+            const fields = { email, password };
+            setGuestLoader(true);
+            dispatch(loginUser(fields, role));
         }
-        else if (role === "Student") {
-            const rollNum = "1"
-            const studentName = "Dipesh Awasthi"
-            const fields = { rollNum, studentName, password }
-            setGuestLoader(true)
-            dispatch(loginUser(fields, role))
-        }
-        else if (role === "Teacher") {
-            const email = "tony@12"
-            const fields = { email, password }
-            setGuestLoader(true)
-            dispatch(loginUser(fields, role))
-        }
-    }
+    };
 
     useEffect(() => {
         if (status === 'success' || currentUser !== null) {
             if (currentRole === 'Admin') {
                 navigate('/Admin/dashboard');
-            }
-            else if (currentRole === 'Student') {
+            } else if (currentRole === 'Student') {
                 navigate('/Student/dashboard');
             } else if (currentRole === 'Teacher') {
                 navigate('/Teacher/dashboard');
             }
-        }
-        else if (status === 'failed') {
-            setMessage(response)
-            setShowPopup(true)
-            setLoader(false)
-        }
-        else if (status === 'error') {
-            setMessage("Network Error")
-            setShowPopup(true)
-            setLoader(false)
-            setGuestLoader(false)
+        } else if (status === 'failed') {
+            setMessage(response);
+            setShowPopup(true);
+            setLoader(false);
+        } else if (status === 'error') {
+            setMessage("Network Error");
+            setShowPopup(true);
+            setLoader(false);
+            setGuestLoader(false);
         }
     }, [status, currentRole, navigate, error, response, currentUser]);
 
@@ -155,8 +163,10 @@ const LoginPage = ({ role }) => {
                                         type="number"
                                         autoFocus
                                         error={rollNumberError}
-                                        helperText={rollNumberError && 'Roll Number is required'}
+                                        helperText={rollNumberError && 'ID Number is required'}
                                         onChange={handleInputChange}
+                                        inputProps={{ min: 1 }}
+                                        onKeyDown={preventMinus}
                                     />
                                     <TextField
                                         margin="normal"
@@ -214,10 +224,10 @@ const LoginPage = ({ role }) => {
                                 }}
                             />
                             <Grid container sx={{ display: "flex", justifyContent: "space-between" }}>
-                                <FormControlLabel
+                                {/* <FormControlLabel
                                     control={<Checkbox value="remember" color="primary" />}
                                     label="Remember me"
-                                />
+                                /> */}
                                 {/* <StyledLink href="#">
                                     Forgot password?
                                 </StyledLink> */}
@@ -280,9 +290,9 @@ const LoginPage = ({ role }) => {
             <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
         </ThemeProvider>
     );
-}
+};
 
-export default LoginPage
+export default LoginPage;
 
 const StyledLink = styled(Link)`
   margin-top: 9px;

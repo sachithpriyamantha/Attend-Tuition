@@ -8,6 +8,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HomeIcon from '@mui/icons-material/Home';
+import Attachment from '@mui/icons-material/Attachment';
 
 const StudentSideBar = () => {
     const location = useLocation();
@@ -38,6 +39,13 @@ const StudentSideBar = () => {
                     </ListItemIcon>
                     <ListItemText primary="Complain" />
                 </ListItemButton>
+                <ListItemButton component={Link} to="/Admin/attachment">
+                                    <ListItemIcon>
+                                        <Attachment color={location.pathname.startsWith("/Admin/attachment") ? 'primary' : 'inherit'} />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Attachment" />
+                                </ListItemButton>
+                
             </React.Fragment>
             <Divider sx={{ my: 1 }} />
             <React.Fragment>
